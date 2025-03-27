@@ -1,0 +1,42 @@
+# Settings for Backend (on Cloud Run).
+# See https://firebase.google.com/docs/app-hosting/configure#cloud-run
+runConfig:
+  minInstances: 0
+  # maxInstances: 100
+  # concurrency: 80
+  # cpu: 1
+  # memoryMiB: 512
+
+# Environment variables and secrets.
+# env:
+# Configure environment variables.
+# See https://firebase.google.com/docs/app-hosting/configure#user-defined-environment
+# - variable: MESSAGE
+#   value: Hello world!
+#   availability:
+#     - BUILD
+#     - RUNTIME
+
+# Grant access to secrets in Cloud Secret Manager.
+# See https://firebase.google.com/docs/app-hosting/configure#secret-parameters
+# - variable: MY_SECRET
+#   secret: mySecretRef
+
+env:
+  # Get these values from the Firebase console
+  - variable: NEXT_PUBLIC_FIREBASE_API_KEY
+    value: AIzaSyDWfXsKh_jSmd8fd58h0njYmc1UinHoVOs
+  - variable: NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN
+    value: lunarvoidcreative-6f724.firebaseapp.com
+  - variable: NEXT_PUBLIC_FIREBASE_PROJECT_ID
+    value: lunarvoidcreative-6f724
+  - variable: NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET
+    value: lunarvoidcreative-6f724.firebasestorage.app
+  - variable: NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID
+    value: 327244733323
+  - variable: NEXT_PUBLIC_FIREBASE_APP_ID
+    value: 1:327244733323:web:50c558fbac86a6b492ad8e
+  - variable: NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID
+    value: G-3CRDD36QRB
+  - variable: NEXT_PUBLIC_AUTH_SECRET
+    value: 2JjPDblQiuZc3txBwIXMMjUjig/+vchtXXBn3N1NX38= # Added by `npx auth`. Read more: https://cli.authjs.dev
