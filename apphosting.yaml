@@ -38,5 +38,3 @@ env:
     value: 1:327244733323:web:50c558fbac86a6b492ad8e
   - variable: NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID
     value: G-3CRDD36QRB
-  - variable: NEXT_PUBLIC_AUTH_SECRET
-    value: 2JjPDblQiuZc3txBwIXMMjUjig/+vchtXXBn3N1NX38= # Added by `npx auth`. Read more: https://cli.authjs.dev
