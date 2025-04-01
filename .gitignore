@@ -45,3 +45,5 @@ lib/firebase/config.js
 .firebase/
 
 public/auth-service-worker.js
+
+.husky

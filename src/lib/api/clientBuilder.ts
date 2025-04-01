@@ -1,4 +1,4 @@
-import type { Nullable } from "../utils/typeHelpers";
+import type { Nullable } from '../utils/typeHelpers';
 
 interface Input {
   body?: Record<string, unknown>;
@@ -14,14 +14,14 @@ export class SDKClient {
 
   buildQueryString(queries?: Record<string, string | Array<string>>) {
     const params = new URLSearchParams();
-    if (!queries) return "";
-    Object.keys(queries).forEach((key) => {
+    if (!queries) return '';
+    Object.keys(queries).forEach(key => {
       const value = queries[key];
-      if (typeof value === "string") {
+      if (typeof value === 'string') {
         params.append(key, value);
         return;
       }
-      value.forEach((v) => params.append(key, v));
+      value?.forEach(v => params.append(key, v));
     });
     return new URLSearchParams(params).toString();
   }
@@ -35,7 +35,7 @@ export class SDKClient {
     api: string;
     input?: Input;
     pageParam?: Nullable<string>;
-    method?: "POST" | "GET";
+    method?: 'POST' | 'GET';
   }) {
     return await fetch(
       pageParam
@@ -44,7 +44,7 @@ export class SDKClient {
       {
         ...(method && { method }),
         ...(input?.body && { body: JSON.stringify(input.body) }),
-      }
+      },
     )
       .then((res: Response) => {
         if (res.status !== 200) {
@@ -52,13 +52,13 @@ export class SDKClient {
             throw new Error(text);
           });
         }
-        const contentType = res.headers.get("content-type");
-        if (contentType && contentType.indexOf("application/json") !== -1) {
+        const contentType = res.headers.get('content-type');
+        if (contentType && contentType.indexOf('application/json') !== -1) {
           return res.json();
         }
-        if (contentType === "image/jpeg") return res.blob();
+        if (contentType === 'image/jpeg') return res.blob();
         return res.text();
       })
-      .catch((err) => console.error({ err }));
+      .catch(err => console.error({ err }));
   }
 }

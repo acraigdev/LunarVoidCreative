@@ -1,7 +1,7 @@
-import type { ErrorInfo, ReactNode } from "react";
-import React, { Component } from "react";
-import { SpaceBetween } from "../shared/SpaceBetween";
-import { Icon } from "../shared/Icon";
+import type { ErrorInfo, ReactNode } from 'react';
+import React, { Component } from 'react';
+import { SpaceBetween } from '@/components/shared/SpaceBetween';
+import { Icon } from '@/components/shared/Icon';
 
 interface Props {
   children: ReactNode;
@@ -22,7 +22,7 @@ export class ErrorBoundary extends Component<Props, State> {
   }
 
   public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-    console.error("Uncaught error:", error, errorInfo);
+    console.error('Uncaught error:', error, errorInfo);
   }
 
   public render() {

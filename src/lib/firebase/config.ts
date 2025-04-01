@@ -1,3 +1,5 @@
+import type { FirebaseOptions } from 'firebase/app';
+
 const config = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
   authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
@@ -7,12 +9,14 @@ const config = {
   appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
 };
 
+type Key = keyof typeof config;
+
 // When deployed, there are quotes that need to be stripped
-Object.keys(config).forEach((key) => {
-  const configValue = config[key] + "";
-  if (configValue.charAt(0) === '"') {
+(Object.keys(config) as Key[]).forEach(key => {
+  const configValue = config[key];
+  if (configValue?.charAt(0) === '"') {
     config[key] = configValue.substring(1, configValue.length - 1);
   }
 });
 
-export const firebaseConfig = config;
+export const firebaseConfig = config as FirebaseOptions;

@@ -1,7 +1,8 @@
-"use client";
-import React, { Key } from "react";
-import { signOut } from "@/lib/firebase/auth";
-import { useUser } from "../../lib/hooks/useUser";
+'use client';
+import type { Key } from 'react';
+import React from 'react';
+import { signOut } from '@/lib/firebase/auth';
+import { useUser } from '@/lib/hooks/useUser';
 import {
   Link,
   Navbar,
@@ -12,9 +13,9 @@ import {
   Avatar,
   DropdownItem,
   DropdownMenu,
-} from "@heroui/react";
-import { Route } from "../../lib/utils/routes";
-import { usePathname } from "next/navigation";
+} from '@heroui/react';
+import { Route } from '@/lib/utils/routes';
+import { usePathname } from 'next/navigation';
 
 export default function Header() {
   const pathname = usePathname();
@@ -23,7 +24,7 @@ export default function Header() {
 
   const handleMenuClick = (key: Key) => {
     switch (key) {
-      case "signOut":
+      case 'signOut':
         signOut();
     }
   };
@@ -33,14 +34,14 @@ export default function Header() {
   return (
     <Navbar>
       <NavbarContent>
-        {navItems.map((item) => {
+        {navItems.map(item => {
           const isActive = pathname === item.path;
           return (
             <NavbarItem key={item.path} isActive={isActive}>
               <Link
-                aria-current={isActive ? "page" : false}
+                aria-current={isActive ? 'page' : false}
                 href={item.path}
-                color={isActive ? "primary" : "foreground"}
+                color={isActive ? 'primary' : 'foreground'}
               >
                 {item.title}
               </Link>
@@ -53,15 +54,15 @@ export default function Header() {
           <Dropdown placement="bottom-end">
             <DropdownTrigger>
               <Avatar
-                src={user?.photoURL ?? "/profile.svg"}
+                src={user?.photoURL ?? '/profile.svg'}
                 size="md"
-                alt={user.email}
+                alt={user.email ?? 'User menu'}
               />
             </DropdownTrigger>
             <DropdownMenu
               aria-label="Profile Actions"
               variant="flat"
-              onAction={(key) => handleMenuClick(key)}
+              onAction={key => handleMenuClick(key)}
             >
               <DropdownItem key="signOut" color="danger">
                 Sign out

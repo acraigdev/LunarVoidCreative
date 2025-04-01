@@ -1,5 +1,5 @@
 // https://heroicons.com/outline
-import React from "react";
+import React from 'react';
 
 const Arrow = ({ ...props }) => (
   <svg
