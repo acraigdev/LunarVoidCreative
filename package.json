@@ -14,7 +14,7 @@
     "prepare": "husky"
   },
   "dependencies": {
-    "@heroui/react": "^2.7.6-beta.2",
+    "@heroui/react": "^2.8.0-beta.2",
     "@tanstack/react-query": "^5.71.1",
     "firebase": "^11.5.0",
     "framer-motion": "^12.6.2",
@@ -38,7 +38,7 @@
     "eslint-plugin-prettier": "^5.2.5",
     "husky": "^9.1.7",
     "prettier": "^3.5.3",
-    "tailwindcss": "^4.0.17",
+    "tailwindcss": "^4.1.5",
     "typescript": "^5"
   }
 }
