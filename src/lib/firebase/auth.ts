@@ -7,6 +7,7 @@ import {
 
 import { auth } from '@/lib/firebase/clientApp';
 import type { Nullable } from '../utils/typeHelpers';
+import { addUserToDb } from './firestore';
 
 export function onAuthStateChanged(cb: (authUser?: Nullable<User>) => void) {
   return _onAuthStateChanged(auth, cb);
@@ -16,7 +17,8 @@ export async function signInWithGoogle() {
   const provider = new GoogleAuthProvider();
 
   try {
-    await signInWithPopup(auth, provider);
+    const res = await signInWithPopup(auth, provider);
+    addUserToDb(res.user.uid);
   } catch (error) {
     console.error('Error signing in with Google', error);
   }
