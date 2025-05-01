@@ -16,11 +16,11 @@ import {
 } from '@heroui/react';
 import { Route } from '@/lib/utils/routes';
 import { usePathname } from 'next/navigation';
+import { LoginScreen } from './LoginScreen';
 
-export default function Header() {
+export default function Header({ initialUser }: { initialUser: string }) {
   const pathname = usePathname();
-  const user = useUser();
-  console.log({ user });
+  const user = useUser({ initialUser: JSON.parse(initialUser) });
 
   const handleMenuClick = (key: Key) => {
     switch (key) {
@@ -33,6 +33,7 @@ export default function Header() {
 
   return (
     <Navbar>
+      <LoginScreen initialUser={initialUser} />
       <NavbarContent>
         {navItems.map(item => {
           const isActive = pathname === item.path;

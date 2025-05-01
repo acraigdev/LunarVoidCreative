@@ -1,11 +1,9 @@
 import type { Metadata } from 'next';
 import { Quicksand, Montserrat } from 'next/font/google';
-import '@/lib/utils/globals.css';
+import '@/lib/utils/style/globals.css';
 import Header from '../components/layout/Header';
 import { getAuthenticatedAppForUser } from '../lib/firebase/serverApp';
-import { LoginScreen } from '../components/layout/LoginScreen';
 import { Providers } from '../components/layout/Providers';
-import { Container } from '../components/layout/Container';
 
 const quicksandSans = Quicksand({
   variable: '--font-quick-sans',
@@ -29,16 +27,22 @@ export default async function RootLayout({
 }>) {
   const { currentUser } = await getAuthenticatedAppForUser();
 
+  // const pathname = usePathname();
+  // const title = Object.values(Route).find(
+  //   route => route.path === pathname,
+  // )?.title;
+
   return (
     <html lang="en">
       <body
         className={`${quicksandSans.variable} ${montserratSans.variable} antialiased light`}
       >
         <Providers>
-          <LoginScreen initialUser={currentUser} />
-          <Header />
+          <Header initialUser={JSON.stringify(currentUser)} />
           <main>
-            <Container>{children}</Container>
+            <div className="w-full sm:w-3/4 m-auto bg-white rounded-lg shadow-sm p-4 md:p-15">
+              {children}
+            </div>
           </main>
         </Providers>
       </body>

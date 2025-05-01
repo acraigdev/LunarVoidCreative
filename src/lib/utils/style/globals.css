@@ -1,0 +1,47 @@
+@import 'tailwindcss';
+@plugin './hero.ts';
+@source '../../../../node_modules/@heroui/theme/dist/**/*.{js,ts,jsx,tsx}';
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --font-header: var(--font-montserrat-sans);
+  --font-body: var(--font-quick-sans);
+}
+
+:focus-visible {
+  outline: 0;
+}
+
+h1,
+h2,
+h3 {
+  @apply font-header font-bold;
+}
+
+h1 {
+  @apply text-3xl md:text-4xl;
+}
+
+h2 {
+  @apply text-2xl md:text-3xl;
+}
+
+h3 {
+  @apply text-xl md:text-2xl;
+}
+
+h4 {
+  @apply font-body text-lg md:text-xl;
+}
+
+h5 {
+  @apply font-body text-base md:text-lg;
+}
+
+p {
+  @apply font-body mb-2;
+}
+
+span {
+  @apply font-body;
+}

@@ -50,8 +50,8 @@ function useUserSession(initialUser: Nullable<User>) {
   return user;
 }
 
-export function LoginScreen({ initialUser }: { initialUser: Nullable<User> }) {
-  const user = useUserSession(initialUser);
+export function LoginScreen({ initialUser }: { initialUser: string }) {
+  const user = useUserSession(JSON.parse(initialUser));
 
   if (user) return <></>;
 

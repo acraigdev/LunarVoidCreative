@@ -15,3 +15,7 @@ export function isNonNullable<T>(val: T): val is NonNullable<T> {
 export interface ValidationDelegate {
   validate: ({ shouldFocus }: { shouldFocus: boolean }) => boolean;
 }
+
+export type WithRequired<T, K extends keyof T> = T & { [P in K]-?: T[P] };
+
+export type PartialMaybe<T> = { [P in keyof T]?: T[P] | undefined };
