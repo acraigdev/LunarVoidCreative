@@ -5,6 +5,7 @@ import React, { useState } from 'react';
 import { questions } from './questionList';
 import { QuestionPicker } from './QuestionPicker';
 import { SpaceBetween } from '../shared/SpaceBetween';
+import { upsertReminder } from '../../lib/firebase/firestore';
 
 interface CreateFormProps {
   type: string;
@@ -24,8 +25,14 @@ export function CreateForm({ type }: CreateFormProps) {
     console.log(e);
 
     const data = Object.fromEntries(new FormData(e.currentTarget));
+    // Process form data so everything isn't just a string
+    // Also need to figure out how to process the type of data so it's not just "any"...
+    // Idk how to dynamically build that, we can maybe use the question type to assume the
+    // type but I don't think you can build types like that?
+    // I suspect the questions can't be defined quite as dynamically as they currently are
+    // and the type will have to be defined for each item... Unsure htough
     console.log(data);
-
+    upsertReminder({ reminder: type, data });
     // setSubmitted(data);
   };
   return (

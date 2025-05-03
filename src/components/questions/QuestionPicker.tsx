@@ -14,12 +14,6 @@ export type QuestionPickerProps = {
 };
 
 export function QuestionPicker({ question }: QuestionPickerProps) {
-  const commonProps = {
-    variant: 'bordered',
-    name: question.id,
-    type: 'text',
-  } as const;
-
   const Questions = {
     input: Input,
     slider: Slider, // TODO: renderValue input for custom value/manual entry
@@ -31,7 +25,15 @@ export function QuestionPicker({ question }: QuestionPickerProps) {
   const QuestionComponent = Questions[question.type] as React.ElementType;
 
   if (QuestionComponent) {
-    return <QuestionComponent {...question} {...commonProps} />;
+    return (
+      <QuestionComponent
+        {...question}
+        variant="bordered"
+        name={question.id}
+        type="text"
+        className="shadow-none"
+      />
+    );
   }
   return <div>Unknown question type</div>;
 }
