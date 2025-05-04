@@ -29,6 +29,7 @@ self.addEventListener('fetch', event => {
 
 async function fetchWithFirebaseHeaders(request) {
   try {
+    if (!firebaseConfig) return;
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const installations = getInstallations(app);

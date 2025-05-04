@@ -28,15 +28,12 @@ export interface NumberQuestion extends NumberInputProps {
   type: 'number';
 }
 
-export type Question = (
+export type Question =
   | InputQuestion
   | SliderQuestion
   | TextAreaQuestion
   | DateQuestion
-  | NumberQuestion
-) & {
-  id: string;
-};
+  | NumberQuestion;
 
 export const QuestionType = {
   autocomplete: 'autocomplete',
