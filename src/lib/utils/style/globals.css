@@ -45,3 +45,42 @@ p {
 span {
   @apply font-body;
 }
+
+.trackerShadow {
+  filter: drop-shadow(0px 0px 1px #c499d3);
+}
+
+/* CSS to add the icon bump to heroUI's card
+
+  In order to keep the built-in functionality, the bump had to be applied directly to the card
+  and extend the existing shape. This was accomplished with various masks to hide/show different
+  parts of the card rectangle
+*/
+.trackerCard {
+  --r: 14px; /* the radius */
+  --t: 30px; /* top padding */
+  border-radius: var(--r);
+  padding-top: var(--t);
+  mask-image:
+  /* Top left circle to add border radius*/
+    radial-gradient(farthest-side, #000 100%, #0000),
+    /* Top right circle to add border radius */
+      radial-gradient(farthest-side, #000 100%, #0000),
+    /* Solid box between circles */ linear-gradient(#000 0 0),
+    /* Solid bottom box that causes the top of the card to be hidden */
+      linear-gradient(#000 0 0),
+    /* Top center circle */ radial-gradient(farthest-side, #000 100%, #0000);
+  mask-position:
+    0 calc(var(--t) - var(--r)),
+    100% calc(var(--t) - var(--r)),
+    calc(var(--r)) calc(var(--t) - var(--r)),
+    bottom,
+    top;
+  mask-size:
+    calc(var(--r) * 2) calc(var(--r) * 2),
+    calc(var(--r) * 2) calc(var(--r) * 2),
+    calc(100% - var(--r) * 2) calc(var(--r) * 2),
+    100% calc(100% - var(--t)),
+    calc(var(--t) * 2) calc(var(--t) * 2);
+  mask-repeat: no-repeat;
+}
