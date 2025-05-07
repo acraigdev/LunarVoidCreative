@@ -1,5 +1,5 @@
-import { QuestionType } from '../../components/questions/utils';
-import { ProjectType } from '@/lib/utils/types/Projects';
+import { QuestionType } from './types/Questions';
+import { ProjectType } from './types/Projects';
 import { TrackerType } from './types/Tracker';
 /**
  * Current data structure:
@@ -15,10 +15,12 @@ export const AvailableQuestions = {
   startDate: {
     label: 'Start date',
     type: QuestionType.date,
+    preview: true,
   },
   endDate: {
     label: 'Finish date',
     type: QuestionType.date,
+    preview: true,
   },
   notes: {
     label: 'Notes',
@@ -31,6 +33,7 @@ export const AvailableQuestions = {
   currentRow: {
     label: 'Current row',
     type: QuestionType.number,
+    preview: true,
   },
   hook: {
     label: 'Hook size',
@@ -40,6 +43,7 @@ export const AvailableQuestions = {
     maxValue: 10,
     step: 0.25,
     allowManual: true,
+    preview: true,
   },
   yarn: {
     label: 'Yarn details',
@@ -53,10 +57,13 @@ export type TrackerDef = {
   label?: string;
   icon?: string;
 };
-export const Trackers: Record<
+
+export type TrackerMap = Record<
   ProjectType | Exclude<TrackerType, 'project'>,
   TrackerDef
-> = {
+>;
+
+export const Trackers: TrackerMap = {
   [ProjectType.crochet]: {
     icon: '/crochet.svg',
     questions: [

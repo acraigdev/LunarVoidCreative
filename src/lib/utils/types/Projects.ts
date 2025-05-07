@@ -1,4 +1,4 @@
-import { Nullable } from '../typeHelpers';
+import type { Nullable } from '../typeHelpers';
 
 export const ProjectType = {
   crochet: 'crochet',

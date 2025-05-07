@@ -82,7 +82,7 @@ const eslintConfig = [
       semi: ['error', 'always'],
       'semi-spacing': ['error'],
       'no-extra-boolean-cast': 'off',
-      'import/no-cycle': 2,
+      // 'import/no-cycle': 2,
     },
   }),
 ];

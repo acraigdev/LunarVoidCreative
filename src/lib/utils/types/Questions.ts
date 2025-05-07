@@ -5,11 +5,10 @@ import type {
   SliderProps,
   TextAreaProps,
 } from '@heroui/react';
-import type { Nullable } from '../../lib/utils/typeHelpers';
+import type { Nullable } from '../typeHelpers';
 
 export interface InputQuestion extends InputProps {
   type: 'input';
-  label: string;
 }
 export interface SliderQuestion extends SliderProps {
   type: 'slider';
@@ -28,12 +27,16 @@ export interface NumberQuestion extends NumberInputProps {
   type: 'number';
 }
 
-export type Question =
+export type Question = (
   | InputQuestion
   | SliderQuestion
   | TextAreaQuestion
   | DateQuestion
-  | NumberQuestion;
+  | NumberQuestion
+) & {
+  label: string;
+  preview?: boolean;
+};
 
 export const QuestionType = {
   autocomplete: 'autocomplete',

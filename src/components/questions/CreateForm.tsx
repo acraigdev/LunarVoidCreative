@@ -3,14 +3,15 @@ import React from 'react';
 import { QuestionPicker } from './QuestionPicker';
 import { SpaceBetween } from '../shared/SpaceBetween';
 import { upsertTracker } from '../../lib/firebase/firestore';
-import { Question, QuestionType } from './utils';
+import type { Question } from '@/lib/utils/types/Questions';
+import { QuestionType } from '@/lib/utils/types/Questions';
 import { Timestamp } from 'firebase/firestore';
 import { v4 as uuidv4 } from 'uuid';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
-import { Tracker, TrackerType } from '@/lib/utils/types/Tracker';
-import { ProjectType } from '@/lib/utils/types/Projects';
-import { AvailableQuestions } from '@/lib/utils/questionList';
+import type { Tracker, TrackerType } from '@/lib/utils/types/Tracker';
+import type { ProjectType } from '@/lib/utils/types/Projects';
+import type { AvailableQuestions } from '@/lib/utils/questionList';
 
 interface CreateProjectFormProps {
   questionList: Record<AvailableQuestions, Question>;
@@ -51,8 +52,9 @@ export function CreateForm({
                 ? Number(data[q])
                 : data[q],
         };
-        // TODO
       },
+      // TODO
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       {} as Record<AvailableQuestions, any>,
     );
   };

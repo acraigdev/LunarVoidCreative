@@ -17,7 +17,7 @@ export default function Home() {
       {isLoading ? (
         <Spinner />
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="w-full columns-xs gap-5">
           {trackers?.map(tracker => (
             <TrackerCard key={tracker.id} {...tracker} />
           ))}

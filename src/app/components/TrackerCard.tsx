@@ -1,27 +1,24 @@
 'use client';
 
-import { TrackerDef, Trackers } from '@/lib/utils/questionList';
-import { Tracker, TrackerType } from '@/lib/utils/types/Tracker';
+import type { TrackerDef } from '@/lib/utils/questionList';
+import type { Tracker } from '@/lib/utils/types/Tracker';
 import { Card, CardBody, CardHeader, Divider, Image } from '@heroui/react';
 import { useQuery } from '@tanstack/react-query';
 import invariant from 'ts-invariant';
+import { getTrackerDefinition } from '../../lib/api/firebaseQueries';
+import { TrackerDetails } from './TrackerDetails';
 
-export function TrackerCard({ label, tracker, subtype }: Tracker) {
+export function TrackerCard({ label, tracker, subtype, data }: Tracker) {
   const { data: trackerDef } = useQuery({
-    queryKey: ['getTracker', tracker, subtype],
-    queryFn: () =>
-      tracker === TrackerType.project && subtype
-        ? Trackers[subtype]
-        : // @ts-expect-error will resolve once there's earlier questions
-          Trackers[tracker],
-
+    ...getTrackerDefinition({ type: tracker, subtype }),
     select: res => {
       invariant(res, 'Tracker definition not found');
       return res as TrackerDef;
     },
   });
+
   return (
-    <div className="trackerShadow">
+    <div className="trackerShadow mb-4">
       <Card
         isPressable
         onPress={() => console.log('pressed')}
@@ -37,10 +34,12 @@ export function TrackerCard({ label, tracker, subtype }: Tracker) {
               wrapper: 'absolute left-1/2 -translate-x-1/2 top-1',
             }}
           />
-          <h4 className="font-semibold">{label}</h4>
+          <h4 className="font-bold">{label}</h4>
         </CardHeader>
         <Divider />
-        <CardBody>Idk some details</CardBody>
+        <CardBody>
+          <TrackerDetails data={data} tracker={tracker} subtype={subtype} />
+        </CardBody>
       </Card>
     </div>
   );

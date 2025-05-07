@@ -1,6 +1,5 @@
-'use client';
 import React from 'react';
-import type { Question } from './utils';
+import type { Question } from '@/lib/utils/types/Questions';
 import {
   DatePicker,
   Input,
@@ -8,7 +7,7 @@ import {
   Slider,
   Textarea,
 } from '@heroui/react';
-import { AvailableQuestions } from '@/lib/utils/questionList';
+import type { AvailableQuestions } from '@/lib/utils/questionList';
 
 export type QuestionPickerProps = {
   question: Question;

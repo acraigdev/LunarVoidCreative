@@ -1,5 +1,5 @@
-import { Nullable } from '../typeHelpers';
-import { Project, ProjectType } from './Projects';
+import type { Nullable } from '../typeHelpers';
+import type { Project, ProjectType } from './Projects';
 
 export const TrackerType = {
   project: 'project',
@@ -8,12 +8,14 @@ export const TrackerType = {
 
 export type TrackerType = (typeof TrackerType)[keyof typeof TrackerType];
 
+export type TrackerData = Project;
+
 export type Tracker = {
   id: string;
   created?: Date;
   modified: Date;
   tracker: TrackerType;
   label: string;
-  data: Project;
+  data: TrackerData;
   subtype?: Nullable<ProjectType>;
 };

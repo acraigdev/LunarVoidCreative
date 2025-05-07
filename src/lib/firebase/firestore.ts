@@ -1,16 +1,18 @@
 import { db, auth } from '@/lib/firebase/clientApp';
+import type {
+  QueryDocumentSnapshot,
+  SnapshotOptions,
+} from 'firebase/firestore';
 import {
   collection,
   doc,
   getDocs,
   limit,
   query,
-  QueryDocumentSnapshot,
   setDoc,
-  SnapshotOptions,
 } from 'firebase/firestore';
 import invariant from 'ts-invariant';
-import { Tracker } from '../utils/types/Tracker';
+import type { Tracker } from '../utils/types/Tracker';
 
 export async function addUserToDb(userId: string) {
   const docRef = doc(db, 'users', userId);
@@ -50,7 +52,7 @@ export async function upsertTracker(tracker: Tracker) {
 export async function getTrackers() {
   const uid = auth.currentUser?.uid;
   invariant(uid, 'uid undefined');
-  let q = query(collection(db, 'users', uid, 'trackers'), limit(20));
+  const q = query(collection(db, 'users', uid, 'trackers'), limit(20));
   // if (lastDoc) {
   //   q = query(q, startAfter(lastDoc));
   // }

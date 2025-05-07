@@ -50,6 +50,7 @@ function useUserSession(initialUser: Nullable<User>) {
   return user;
 }
 
+// TODO: Add trial
 export function LoginScreen({ initialUser }: { initialUser: string }) {
   const user = useUserSession(JSON.parse(initialUser));
 
