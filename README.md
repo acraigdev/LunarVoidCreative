@@ -37,3 +37,4 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 #### TODO
 
 - constraints - limit label length etc
+- next lint has more than inline VSC and need to figure that out because its annoying

@@ -31,9 +31,11 @@ export function TrackerCard({ label, tracker, subtype }: Tracker) {
           <Image
             src={trackerDef?.icon}
             fallbackSrc="/globe.svg"
-            width="25"
-            height="25"
-            classNames={{ wrapper: 'absolute left-1/2 -translate-x-1/2 top-2' }}
+            width="40"
+            height="40"
+            classNames={{
+              wrapper: 'absolute left-1/2 -translate-x-1/2 top-1',
+            }}
           />
           <h4 className="font-semibold">{label}</h4>
         </CardHeader>

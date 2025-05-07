@@ -58,6 +58,7 @@ export const Trackers: Record<
   TrackerDef
 > = {
   [ProjectType.crochet]: {
+    icon: '/crochet.svg',
     questions: [
       'label',
       'pattern',
@@ -70,6 +71,7 @@ export const Trackers: Record<
     ],
   },
   [ProjectType.knit]: {
+    icon: '/knit.svg',
     questions: [
       'label',
       'pattern',

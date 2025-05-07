@@ -40,9 +40,9 @@ export default async function RootLayout({
         <Providers>
           <Header initialUser={JSON.stringify(currentUser)} />
           <main>
-            <div className="w-full sm:w-3/4 m-auto bg-white rounded-lg shadow-sm p-4 md:p-15">
-              {children}
-            </div>
+            {/* <div className="w-full sm:w-3/4 m-auto bg-white rounded-lg shadow-sm p-4 md:p-15"> */}
+            {children}
+            {/* </div> */}
           </main>
         </Providers>
       </body>
