@@ -21,7 +21,7 @@ export function TrackerDetails({
   subtype,
 }: TrackerDetailsProps) {
   const { data: formattedData, isLoading } = useQuery({
-    ...getQuestionList({ type: tracker, subtype }),
+    ...getQuestionList({ tracker, subtype }),
     select: questionList => {
       invariant(questionList, 'questionList for details is undefined');
       return (Object.keys(questionList) as AvailableQuestions[])

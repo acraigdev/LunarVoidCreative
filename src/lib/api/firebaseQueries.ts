@@ -1,5 +1,5 @@
 import type { QueryFunctionContext } from '@tanstack/react-query';
-import type { ProjectType } from '../utils/types/Projects';
+import type { TrackerSubtype } from '../utils/types/Tracker';
 import { TrackerType } from '../utils/types/Tracker';
 import type { TrackerDef } from '../utils/questionList';
 import { AvailableQuestions, Trackers } from '../utils/questionList';
@@ -8,30 +8,30 @@ import type { Question } from '../utils/types/Questions';
 import invariant from 'ts-invariant';
 
 export function getQuestionList({
-  type,
+  tracker,
   subtype,
 }: {
-  type: TrackerType;
-  subtype?: Nullable<ProjectType>;
+  tracker: TrackerType;
+  subtype?: Nullable<TrackerSubtype>;
 }) {
   const queryKey = [
     {
       api: 'getQuestionList',
-      type,
+      tracker,
       ...(subtype && { subtype }),
     },
   ] as const;
   return {
     queryKey,
     queryFn: async ({
-      queryKey: [{ type, subtype }],
+      queryKey: [{ tracker, subtype }],
     }: QueryFunctionContext<typeof queryKey>) => {
       let formQuestions: Maybe<AvailableQuestions[]> = [];
-      if (type === TrackerType.project) {
+      if (tracker === TrackerType.project) {
         invariant(subtype, 'getQuestionList subtype undefined');
         formQuestions = Trackers[subtype]?.questions;
       } else {
-        formQuestions = Trackers[type]?.questions;
+        formQuestions = Trackers[tracker]?.questions;
       }
       if (!formQuestions) return;
       return formQuestions.reduce(
@@ -47,7 +47,7 @@ export function getTrackerDefinition({
   subtype,
 }: {
   type: TrackerType;
-  subtype?: Nullable<ProjectType>;
+  subtype?: Nullable<TrackerSubtype>;
 }) {
   const queryKey = [
     {

@@ -1,11 +1,30 @@
 import { QuestionType } from './types/Questions';
 import { ProjectType } from './types/Projects';
+import type { TrackerSubtype } from './types/Tracker';
 import { TrackerType } from './types/Tracker';
 /**
  * Current data structure:
  * All questions by id
  * trackers have an ordered list of question ids
  */
+
+export const AvailableTrackers = {
+  project: {
+    label: 'Project',
+    description: 'Hobby trackers',
+    hasSubTrackers: true,
+  },
+  medication: {
+    label: 'Medication',
+    description: 'Track medications, symptoms, start and end dates',
+  },
+  crochet: {
+    label: 'Crochet',
+  },
+  knit: {
+    label: 'Knit',
+  },
+};
 
 export const AvailableQuestions = {
   label: {
@@ -59,7 +78,7 @@ export type TrackerDef = {
 };
 
 export type TrackerMap = Record<
-  ProjectType | Exclude<TrackerType, 'project'>,
+  TrackerSubtype | Exclude<TrackerType, 'project'>,
   TrackerDef
 >;
 

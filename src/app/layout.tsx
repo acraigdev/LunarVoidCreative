@@ -39,7 +39,7 @@ export default async function RootLayout({
       >
         <Providers>
           <Header initialUser={JSON.stringify(currentUser)} />
-          <main className="w-full sm:w-3/4 m-auto">{children}</main>
+          <main className="w-full max-w-[1024px] m-auto">{children}</main>
         </Providers>
       </body>
     </html>

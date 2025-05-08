@@ -1,35 +1,24 @@
-'use client';
-import React from 'react';
+import React, { useState } from 'react';
 import { CreateForm } from '../../components/questions/CreateForm';
-import { useQuery } from '@tanstack/react-query';
-import { Spinner } from '@heroui/react';
-import { TrackerType } from '@/lib/utils/types/Tracker';
-import { ProjectType } from '@/lib/utils/types/Projects';
-import { getQuestionList } from '../../lib/api/firebaseQueries';
+import type { TrackerSubtype, TrackerType } from '@/lib/utils/types/Tracker';
+import type { Nullable } from '../../lib/utils/typeHelpers';
+import { CreateTrackerSelection } from '../../components/questions/CreateTrackerSelection';
 
 export default function Create() {
-  const type = TrackerType.project;
-  const subtype = ProjectType.crochet;
-
-  const { data: questionList, isLoading } = useQuery({
-    ...getQuestionList({ type, subtype }),
-  });
+  const [tracker, setTracker] = useState<Nullable<TrackerType>>();
+  const [subtype, setSubtype] = useState<Nullable<TrackerSubtype>>();
 
   return (
     <div className="m-auto bg-white rounded-lg shadow-sm p-4 md:p-15">
       <div className="flex items-center flex-col">
-        <h1 className="mb-5">Create crochet tracker</h1>
-        {isLoading ? (
-          <Spinner />
-        ) : !questionList ? (
-          'TODO: Do this'
-        ) : (
-          <CreateForm
-            questionList={questionList}
-            type={TrackerType.project}
-            subtype={ProjectType.crochet}
-          />
-        )}
+        <h1 className="mb-10">Create Tracker</h1>
+        <CreateTrackerSelection
+          tracker={tracker}
+          onTrackerChange={val => setTracker(val)}
+          subtype={subtype}
+          onSubtypeChange={val => setSubtype(val)}
+        />
+        {tracker && <CreateForm tracker={tracker} subtype={subtype} />}
       </div>
     </div>
   );

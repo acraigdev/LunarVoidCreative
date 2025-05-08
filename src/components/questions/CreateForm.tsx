@@ -1,41 +1,36 @@
-import { Button, Form } from '@heroui/react';
+'use client';
+import { Button, Form, Spinner } from '@heroui/react';
 import React from 'react';
 import { QuestionPicker } from './QuestionPicker';
 import { SpaceBetween } from '../shared/SpaceBetween';
 import { upsertTracker } from '../../lib/firebase/firestore';
-import type { Question } from '@/lib/utils/types/Questions';
 import { QuestionType } from '@/lib/utils/types/Questions';
 import { Timestamp } from 'firebase/firestore';
 import { v4 as uuidv4 } from 'uuid';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
-import type { Tracker, TrackerType } from '@/lib/utils/types/Tracker';
-import type { ProjectType } from '@/lib/utils/types/Projects';
+import type {
+  Tracker,
+  TrackerSubtype,
+  TrackerType,
+} from '@/lib/utils/types/Tracker';
 import type { AvailableQuestions } from '@/lib/utils/questionList';
-
-interface CreateProjectFormProps {
-  questionList: Record<AvailableQuestions, Question>;
-  trackerId?: string;
-  type: 'project';
-  subtype: ProjectType;
-}
+import { getQuestionList } from '../../lib/api/firebaseQueries';
+import type { Nullable } from '../../lib/utils/typeHelpers';
 
 interface CreateFormProps {
-  questionList: Record<AvailableQuestions, Question>;
   trackerId?: string;
-  type: TrackerType;
-  subtype?: never;
+  tracker: TrackerType;
+  subtype?: Nullable<TrackerSubtype>;
 }
 
-export function CreateForm({
-  questionList,
-  type,
-  subtype,
-  trackerId,
-}: CreateFormProps | CreateProjectFormProps) {
+export function CreateForm({ tracker, subtype, trackerId }: CreateFormProps) {
   const queryClient = useQueryClient();
   const router = useRouter();
 
+  const { data: questionList, isLoading } = useQuery({
+    ...getQuestionList({ tracker, subtype }),
+  });
   const convertQuestionData = (data: Record<string, FormDataEntryValue>) => {
     return (Object.keys(data) as AvailableQuestions[]).reduce(
       (acc, q) => {
@@ -81,12 +76,14 @@ export function CreateForm({
       id: trackerId ? trackerId : uuidv4(),
       ...(!trackerId && { created: new Date() }),
       modified: new Date(),
-      tracker: type,
+      tracker,
       label: label,
       data: converted,
       ...(subtype && { subtype }),
     });
   };
+  if (isLoading) return <Spinner />;
+  if (!questionList) return <>TODO Error</>;
   return (
     <Form className="w-full max-w-md" onSubmit={onSubmit}>
       <SpaceBetween size="m" alignOverride="items-center" className="w-full">

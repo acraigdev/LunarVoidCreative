@@ -10,6 +10,8 @@ export type TrackerType = (typeof TrackerType)[keyof typeof TrackerType];
 
 export type TrackerData = Project;
 
+export type TrackerSubtype = ProjectType;
+
 export type Tracker = {
   id: string;
   created?: Date;
@@ -17,5 +19,5 @@ export type Tracker = {
   tracker: TrackerType;
   label: string;
   data: TrackerData;
-  subtype?: Nullable<ProjectType>;
+  subtype?: Nullable<TrackerSubtype>;
 };

@@ -2,7 +2,7 @@
 
 import type { TrackerDef } from '@/lib/utils/questionList';
 import type { Tracker } from '@/lib/utils/types/Tracker';
-import { Card, CardBody, CardHeader, Divider, Image } from '@heroui/react';
+import { Card, CardBody, CardHeader, Image } from '@heroui/react';
 import { useQuery } from '@tanstack/react-query';
 import invariant from 'ts-invariant';
 import { getTrackerDefinition } from '../../lib/api/firebaseQueries';
@@ -33,11 +33,11 @@ export function TrackerCard({ label, tracker, subtype, data }: Tracker) {
             classNames={{
               wrapper: 'absolute left-1/2 -translate-x-1/2 top-1',
             }}
+            alt=""
           />
-          <h4 className="font-bold">{label}</h4>
+          <h4 className="font-bold text-left">{label}</h4>
         </CardHeader>
-        <Divider />
-        <CardBody>
+        <CardBody className="pt-0">
           <TrackerDetails data={data} tracker={tracker} subtype={subtype} />
         </CardBody>
       </Card>
