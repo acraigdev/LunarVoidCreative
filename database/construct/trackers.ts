@@ -1,9 +1,9 @@
 import sqlite3 from 'sqlite3';
-import { TRACKERS, QUESTIONS, TRACKER_QUESTIONS } from '../tables.js';
+import { TRACKERS } from '../tables';
 
 // Connecting to or creating a new SQLite database file
 const db = new sqlite3.Database(
-  '../collection.db',
+  '../../collection.db',
   sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE,
   err => {
     if (err) {
@@ -17,40 +17,31 @@ const db = new sqlite3.Database(
 db.serialize(() => {
   // Create the items table if it doesn't exist
   db.run(
-    `CREATE TABLE IF NOT EXISTS ${TRACKER_QUESTIONS} (
-        trackerId INTEGER NOT NULL REFERENCES ${TRACKERS},
-        questionId INTEGER NOT NULL REFERENCES ${QUESTIONS}
+    `CREATE TABLE IF NOT EXISTS ${TRACKERS} (
+        id INTEGER NOT NULL PRIMARY KEY,
+        label TEXT NOT NULL,
+        description TEXT,
+        icon TEXT,
+        parentId INTEGER REFERENCES ${TRACKERS}(id)
       )`,
     err => {
       if (err) {
         return console.error('create', err.message);
       }
-      console.log(`Created ${TRACKER_QUESTIONS} table.`);
+      console.log(`Created ${TRACKERS} table.`);
 
       // Clear the existing data in the products table
-      db.run(`DELETE FROM ${TRACKER_QUESTIONS}`, err => {
+      db.run(`DELETE FROM ${TRACKERS}`, err => {
         if (err) {
           return console.error(err.message);
         }
-        console.log(`All rows deleted from ${TRACKER_QUESTIONS}`);
+        console.log(`All rows deleted from ${TRACKERS}`);
 
-        const insertSql = `INSERT INTO ${TRACKER_QUESTIONS}(trackerId, questionId) VALUES
-            (3,1),
-            (3,5),
-            (3,6),
-            (3,7),
-            (3,8),
-            (3,2),
-            (3,3),
-            (3,4),
-            (4,1),
-            (4,5),
-            (4,6),
-            (4,7),
-            (4,8),
-            (4,2),
-            (4,3),
-            (4,4)`;
+        const insertSql = `INSERT INTO ${TRACKERS}(label, description, icon, parentId) VALUES
+        ('Project', 'Hobby projects', null, null),
+        ('Medication', 'Track medications, symptoms, start and end dates', 'medication', null),
+        ('Crochet', null, 'crochet', 1),
+        ('Knit', null, 'knit', 1)`;
 
         db.run(insertSql, function (err) {
           if (err) {

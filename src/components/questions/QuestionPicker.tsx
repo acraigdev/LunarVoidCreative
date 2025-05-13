@@ -7,11 +7,10 @@ import {
   Slider,
   Textarea,
 } from '@heroui/react';
-import type { AvailableQuestions } from '@/lib/utils/questionList';
 
 export type QuestionPickerProps = {
   question: Question;
-  name: AvailableQuestions;
+  name: string;
 };
 
 export function QuestionPicker({ question, name }: QuestionPickerProps) {

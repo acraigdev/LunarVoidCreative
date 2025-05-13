@@ -10,17 +10,10 @@ export type Tracker = {
   subtype?: Nullable<string>;
 };
 
-type BaseTracker = {
-  questions: Array<string>;
-  icon: string;
+export type TrackerDefinition = {
+  id: number;
   label: string;
-  description?: string;
+  description?: Nullable<string>;
+  icon?: Nullable<string>;
+  parentId?: Nullable<number>;
 };
-
-export type TrackerDefinition =
-  | BaseTracker
-  | {
-      label: string;
-      description?: string;
-      secondary: Record<string, BaseTracker>;
-    };

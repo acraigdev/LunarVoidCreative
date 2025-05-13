@@ -10,12 +10,6 @@ export default function Create() {
   const [tracker, setTracker] = useState<Nullable<string>>();
   const [subtype, setSubtype] = useState<Nullable<string>>();
 
-  const { data: trackers, isLoading } = useQuery({
-    ...listTrackers(),
-  });
-
-  console.log(trackers);
-
   return (
     <div className="m-auto bg-white rounded-lg shadow-sm p-4 md:p-15">
       <div className="flex items-center flex-col">

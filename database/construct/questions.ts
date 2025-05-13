@@ -1,9 +1,9 @@
 import sqlite3 from 'sqlite3';
-import { TRACKERS } from '../tables';
+import { QUESTIONS } from '../tables';
 
 // Connecting to or creating a new SQLite database file
 const db = new sqlite3.Database(
-  '../collection.db',
+  '../../collection.db',
   sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE,
   err => {
     if (err) {
@@ -17,31 +17,35 @@ const db = new sqlite3.Database(
 db.serialize(() => {
   // Create the items table if it doesn't exist
   db.run(
-    `CREATE TABLE IF NOT EXISTS ${TRACKERS} (
-        id INTEGER NOT NULL PRIMARY KEY,
+    `CREATE TABLE IF NOT EXISTS ${QUESTIONS} (
+        id INTEGER PRIMARY KEY,
         label TEXT NOT NULL,
-        description TEXT,
-        icon TEXT,
-        parentId INTEGER REFERENCES ${TRACKERS}(id)
+        type TEXT NOT NULL,
+        preview BOOLEAN NOT NULL CHECK (preview IN (0, 1)),
+        data TEXT
       )`,
     err => {
       if (err) {
         return console.error('create', err.message);
       }
-      console.log(`Created ${TRACKERS} table.`);
+      console.log(`Created ${QUESTIONS} table.`);
 
       // Clear the existing data in the products table
-      db.run(`DELETE FROM ${TRACKERS}`, err => {
+      db.run(`DELETE FROM ${QUESTIONS}`, err => {
         if (err) {
           return console.error(err.message);
         }
-        console.log(`All rows deleted from ${TRACKERS}`);
+        console.log(`All rows deleted from ${QUESTIONS}`);
 
-        const insertSql = `INSERT INTO ${TRACKERS}(label, description, icon, parentId) VALUES
-        ('Project', 'Hobby projects', null, null),
-        ('Medication', 'Track medications, symptoms, start and end dates', 'medication.svg', null),
-        ('Crochet', null, 'crochet.svg', 1),
-        ('Knit', null, 'knit.svg', 1)`;
+        const insertSql = `INSERT INTO ${QUESTIONS}(label, type, preview, data) VALUES 
+        ('Title', 'input', false, null),
+        ('Start date', 'date', true, null),
+        ('End date', 'date', true, null),
+        ('Notes', 'textarea', false, null),
+        ('Pattern', 'input', false, null),
+        ('Current row', 'number', true, null),
+        ('Hook size', 'slider', true, '{"defaultValue":4,"minValue":0.25,"maxValue":10,"step":0.25,"allowManual":true}'),
+        ('Yarn details', 'input', false, null)`;
 
         db.run(insertSql, function (err) {
           if (err) {

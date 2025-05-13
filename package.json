@@ -15,15 +15,19 @@
   },
   "dependencies": {
     "@heroui/react": "^2.8.0-beta.4",
+    "@svgr/webpack": "^8.1.0",
     "@tanstack/react-query": "^5.71.1",
+    "axios": "^1.9.0",
     "firebase": "^11.5.0",
     "framer-motion": "^12.9.4",
     "next": "15.2.4",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
+    "server-only": "^0.0.1",
     "sqlite": "^5.1.1",
     "sqlite3": "^5.1.7",
     "ts-invariant": "^0.10.3",
+    "tsx": "^4.19.4",
     "uuid": "^11.1.0"
   },
   "devDependencies": {

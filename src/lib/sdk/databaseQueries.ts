@@ -1,16 +1,33 @@
 import type { QueryFunctionContext } from '@tanstack/react-query';
-import type { Maybe, Nullable } from '../utils/typeHelpers';
-import type { Question } from '../utils/types/Questions';
+import type { Nullable } from '../utils/typeHelpers';
+
+import axios from 'axios';
+import type { APIResponse } from './api';
+import { processResponse } from './api';
+import type { TrackerDefinition } from '../utils/types/Tracker';
 import invariant from 'ts-invariant';
 
-import { SDKClient } from './client';
-
-const dbClient = new SDKClient({ base: '' });
-
-export function listTrackers() {
+export function listTrackerDefinitions({
+  parentId,
+}: {
+  parentId?: Nullable<number>;
+}) {
+  const queryKey = [
+    { api: 'listTrackerDefinitions', ...(parentId && { parentId }) },
+  ] as const;
   return {
-    queryKey: [{ api: 'listTrackers' }],
-    queryFn: async () => await dbClient.send({ api: '/api/listTrackers' }),
+    queryKey,
+    queryFn: async ({
+      queryKey: [{ parentId }],
+    }: QueryFunctionContext<typeof queryKey>) => {
+      const query = parentId ? `?parentId=${parentId}` : '';
+      let res: Nullable<APIResponse<TrackerDefinition[]>> = null;
+      res = await axios
+        .get(`/api/listTrackerDefinitions${query}`)
+        .then(res => res.data);
+      invariant(res, 'listTrackerDefinitions undefined');
+      return processResponse(res);
+    },
   };
 }
 
@@ -33,7 +50,7 @@ export function getQuestionList({
     queryFn: async ({
       queryKey: [{ tracker, subtype }],
     }: QueryFunctionContext<typeof queryKey>) =>
-      await dbClient.send({ api: '/api/listTrackers' }),
+      await axios.get('/api/listTrackers'),
   };
 }
 
@@ -56,6 +73,6 @@ export function getTrackerDefinition({
     queryFn: async ({
       queryKey: [{ type, subtype }],
     }: QueryFunctionContext<typeof queryKey>) =>
-      await dbClient.send({ api: '/api/listTrackers' }),
+      await axios.get('/api/listTrackers'),
   };
 }
