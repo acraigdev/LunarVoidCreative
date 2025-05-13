@@ -2,7 +2,7 @@ import { heroui } from '@heroui/react';
 export default heroui({
   addCommonColors: true,
   themes: {
-    light: {
+    extend: {
       colors: {
         background: '#FFFFFF', // or DEFAULT
         foreground: '#11181C', // or 50 to 900 DEFAULT
