@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { getQuestionList } from '../../lib/api/firebaseQueries';
+import { getQuestionList } from '../../lib/sdk/databaseQueries';
 import type { Nullable } from '../../lib/utils/typeHelpers';
 import { isNonNullable } from '../../lib/utils/typeHelpers';
 import type { ProjectType } from '../../lib/utils/types/Projects';

@@ -9,19 +9,14 @@ import { Timestamp } from 'firebase/firestore';
 import { v4 as uuidv4 } from 'uuid';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
-import type {
-  Tracker,
-  TrackerSubtype,
-  TrackerType,
-} from '@/lib/utils/types/Tracker';
-import type { AvailableQuestions } from '@/lib/utils/questionList';
-import { getQuestionList } from '../../lib/api/firebaseQueries';
+import type { Tracker } from '@/lib/utils/types/Tracker';
+import { getQuestionList } from '../../lib/sdk/databaseQueries';
 import type { Nullable } from '../../lib/utils/typeHelpers';
 
 interface CreateFormProps {
   trackerId?: string;
-  tracker: TrackerType;
-  subtype?: Nullable<TrackerSubtype>;
+  tracker: string;
+  subtype?: Nullable<string>;
 }
 
 export function CreateForm({ tracker, subtype, trackerId }: CreateFormProps) {
@@ -32,7 +27,7 @@ export function CreateForm({ tracker, subtype, trackerId }: CreateFormProps) {
     ...getQuestionList({ tracker, subtype }),
   });
   const convertQuestionData = (data: Record<string, FormDataEntryValue>) => {
-    return (Object.keys(data) as AvailableQuestions[]).reduce(
+    return Object.keys(data).reduce(
       (acc, q) => {
         const question = questionList?.[q];
         if (!data[q] || !question) return acc;
@@ -50,7 +45,7 @@ export function CreateForm({ tracker, subtype, trackerId }: CreateFormProps) {
       },
       // TODO
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      {} as Record<AvailableQuestions, any>,
+      {} as Record<string, any>,
     );
   };
 
@@ -87,7 +82,7 @@ export function CreateForm({ tracker, subtype, trackerId }: CreateFormProps) {
   return (
     <Form className="w-full max-w-md" onSubmit={onSubmit}>
       <SpaceBetween size="m" alignOverride="items-center" className="w-full">
-        {(Object.keys(questionList) as AvailableQuestions[]).map(question => (
+        {Object.keys(questionList).map(question => (
           <QuestionPicker
             question={questionList[question]}
             name={question}

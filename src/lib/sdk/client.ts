@@ -5,11 +5,14 @@ interface Input {
   query?: Record<string, string | Array<string>>;
 }
 
+// Run third party APIs through CORS proxy
 export class SDKClient {
   private base: string;
 
-  constructor({ base }: { base: string }) {
-    this.base = `https://proxy-nhvsjqhtua-uc.a.run.app/${base}`;
+  constructor({ base, useProxy }: { base: string; useProxy?: boolean }) {
+    this.base = useProxy
+      ? `https://proxy-nhvsjqhtua-uc.a.run.app/${base}`
+      : base;
   }
 
   buildQueryString(queries?: Record<string, string | Array<string>>) {
@@ -37,6 +40,7 @@ export class SDKClient {
     pageParam?: Nullable<string>;
     method?: 'POST' | 'GET';
   }) {
+    console.log(`${this.base}${api}?${this.buildQueryString(input?.query)}`);
     return await fetch(
       pageParam
         ? `${this.base}${pageParam}`

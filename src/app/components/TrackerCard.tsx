@@ -5,7 +5,7 @@ import type { Tracker } from '@/lib/utils/types/Tracker';
 import { Card, CardBody, CardHeader, Image } from '@heroui/react';
 import { useQuery } from '@tanstack/react-query';
 import invariant from 'ts-invariant';
-import { getTrackerDefinition } from '../../lib/api/firebaseQueries';
+import { getTrackerDefinition } from '../../lib/sdk/databaseQueries';
 import { TrackerDetails } from './TrackerDetails';
 
 export function TrackerCard({ label, tracker, subtype, data }: Tracker) {

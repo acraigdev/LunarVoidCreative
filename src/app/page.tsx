@@ -4,11 +4,12 @@ import { Spinner } from '@heroui/react';
 import { useQuery } from '@tanstack/react-query';
 import { TrackerCard } from './components/TrackerCard';
 import { SpaceBetween } from '@/components/shared/SpaceBetween';
+import { Tracker } from '@/lib/utils/types/Tracker';
 
 export default function Home() {
   const { data: trackers, isLoading } = useQuery({
     queryKey: ['getTrackers'],
-    queryFn: () => getTrackers(),
+    queryFn: () => [] as Tracker[],
   });
 
   return (
