@@ -1,13 +1,12 @@
 import type { Nullable } from '../typeHelpers';
 
-export type Tracker = {
+export type UserTracker = {
   id: string;
   created?: Date;
   modified: Date;
-  tracker: string;
+  trackerId: number;
   label: string;
   data: Record<string, unknown>;
-  subtype?: Nullable<string>;
 };
 
 export type TrackerDefinition = {

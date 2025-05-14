@@ -6,15 +6,14 @@ import type { APIResponse } from './api';
 import { processResponse } from './api';
 import type { TrackerDefinition } from '../utils/types/Tracker';
 import invariant from 'ts-invariant';
+import type { Question } from '../utils/types/Questions';
 
 export function listTrackerDefinitions({
   parentId,
 }: {
   parentId?: Nullable<number>;
 }) {
-  const queryKey = [
-    { api: 'listTrackerDefinitions', ...(parentId && { parentId }) },
-  ] as const;
+  const queryKey = [{ api: 'listTrackerDefinitions', parentId }] as const;
   return {
     queryKey,
     queryFn: async ({
@@ -31,48 +30,41 @@ export function listTrackerDefinitions({
   };
 }
 
-export function getQuestionList({
-  tracker,
-  subtype,
-}: {
-  tracker: string;
-  subtype?: Nullable<string>;
-}) {
-  const queryKey = [
-    {
-      api: 'getQuestionList',
-      tracker,
-      ...(subtype && { subtype }),
-    },
-  ] as const;
+export function getTrackerDefinition({ id }: { id: number }) {
+  const queryKey = [{ api: 'getTrackerDefinition', id }] as const;
   return {
     queryKey,
     queryFn: async ({
-      queryKey: [{ tracker, subtype }],
-    }: QueryFunctionContext<typeof queryKey>) =>
-      await axios.get('/api/listTrackers'),
+      queryKey: [{ id }],
+    }: QueryFunctionContext<typeof queryKey>) => {
+      let res: Nullable<APIResponse<TrackerDefinition>> = null;
+      res = await axios
+        .get(`/api/getTrackerDefinition?id=${id}`)
+        .then(res => res.data);
+      invariant(res, 'getTrackerDefinition undefined');
+      return processResponse(res);
+    },
   };
 }
 
-export function getTrackerDefinition({
-  tracker,
-  subtype,
-}: {
-  tracker: string;
-  subtype?: Nullable<string>;
-}) {
+export function getTrackerQuestions({ trackerId }: { trackerId: number }) {
   const queryKey = [
     {
-      api: 'getTrackerDefinition',
-      tracker,
-      ...(subtype && { subtype }),
+      api: 'getTrackerQuestions',
+      trackerId,
     },
   ] as const;
   return {
     queryKey,
     queryFn: async ({
-      queryKey: [{ type, subtype }],
-    }: QueryFunctionContext<typeof queryKey>) =>
-      await axios.get('/api/listTrackers'),
+      queryKey: [{ trackerId }],
+    }: QueryFunctionContext<typeof queryKey>) => {
+      let res: Nullable<APIResponse<Question[]>> = null;
+      res = await axios
+        .get(`/api/getTrackerQuestions?trackerId=${trackerId}`)
+        .then(res => res.data);
+      invariant(res, 'getTrackerQuestions undefined');
+      return processResponse(res);
+    },
   };
 }

@@ -17,11 +17,11 @@ export async function fetchFirst<T>(
   db: sqlite3.Database,
   sql: string,
   params?: Array<unknown>,
-): Promise<Array<T>> {
+): Promise<T> {
   return new Promise((resolve, reject) => {
     db.get(sql, params, (err, row) => {
       if (err) reject(err);
-      resolve(row as T[]);
+      resolve(row as T);
     });
   });
 }

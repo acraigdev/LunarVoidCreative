@@ -1,5 +1,8 @@
 import { useQuery } from '@tanstack/react-query';
-import { getQuestionList } from '../../lib/sdk/databaseQueries';
+import {
+  getQuestionList,
+  getTrackerQuestions,
+} from '../../lib/sdk/databaseQueries';
 import type { Nullable } from '../../lib/utils/typeHelpers';
 import { isNonNullable } from '../../lib/utils/typeHelpers';
 import type { ProjectType } from '../../lib/utils/types/Projects';
@@ -12,33 +15,30 @@ import { Spinner } from '@heroui/react';
 
 interface TrackerDetailsProps {
   data: TrackerData;
-  tracker: TrackerType;
-  subtype?: Nullable<ProjectType>;
+  trackerId: number;
 }
-export function TrackerDetails({
-  data,
-  tracker,
-  subtype,
-}: TrackerDetailsProps) {
+export function TrackerDetails({ data, trackerId }: TrackerDetailsProps) {
   const { data: formattedData, isLoading } = useQuery({
-    ...getQuestionList({ tracker, subtype }),
+    ...getTrackerQuestions({ trackerId }),
     select: questionList => {
+      console.log(questionList);
+      console.log(data);
       invariant(questionList, 'questionList for details is undefined');
-      return (Object.keys(questionList) as AvailableQuestions[])
-        .map(key =>
-          !data[key] || !questionList[key].preview
-            ? null
-            : {
-                key,
-                label: questionList[key].label,
-                value:
-                  questionList[key].type === 'date' &&
-                  data[key] instanceof Timestamp
-                    ? timestampToDate(data[key])
-                    : data[key],
-              },
-        )
-        .filter(isNonNullable);
+      // return (Object.keys(questionList))
+      //   .map(key =>
+      //     !data[key] || !questionList[key].preview
+      //       ? null
+      //       : {
+      //           key,
+      //           label: questionList[key].label,
+      //           value:
+      //             questionList[key].type === 'date' &&
+      //             data[key] instanceof Timestamp
+      //               ? timestampToDate(data[key])
+      //               : data[key],
+      //         },
+      //   )
+      //   .filter(isNonNullable);
     },
   });
 

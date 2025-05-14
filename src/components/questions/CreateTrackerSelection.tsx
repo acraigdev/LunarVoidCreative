@@ -1,42 +1,87 @@
 'use client';
-import React from 'react';
-import type { Nullable } from '../../lib/utils/typeHelpers';
+import React, { useState } from 'react';
+import type { Maybe, Nullable } from '../../lib/utils/typeHelpers';
 import { Select, SelectItem, Spinner } from '@heroui/react';
 import { useQuery } from '@tanstack/react-query';
 import { listTrackerDefinitions } from '@/lib/sdk/databaseQueries';
 import { FeatureIcon } from '../shared/FeatureIcon';
+import type { TrackerDefinition } from '../../lib/utils/types/Tracker';
+import { SpaceBetween } from '../shared/SpaceBetween';
 
 interface CreateTrackerSelectionProps {
-  tracker: Nullable<string>;
-  onTrackerChange: (tracker: Nullable<string>) => void;
-  subtype: Nullable<string>;
-  onSubtypeChange: (subtype: Nullable<string>) => void;
+  tracker: Nullable<number>;
+  onTrackerChange: (tracker: Nullable<number>) => void;
 }
 
-export function CreateTrackerSelection({}: CreateTrackerSelectionProps) {
-  const {
-    data: trackers,
-    isLoading,
-    error,
-  } = useQuery({
+export function CreateTrackerSelection({
+  onTrackerChange,
+}: CreateTrackerSelectionProps) {
+  // TODO: edit
+  const [parentTracker, setParentTracker] =
+    useState<Nullable<TrackerDefinition>>(null);
+  const { data: trackers, isLoading } = useQuery({
     ...listTrackerDefinitions({ parentId: null }),
   });
 
-  console.log({ trackers });
-  console.log({ error });
+  const { data: childTrackers } = useQuery({
+    ...listTrackerDefinitions({ parentId: parentTracker?.id }),
+    enabled: Boolean(parentTracker?.id),
+  });
 
   return isLoading ? (
     <Spinner />
   ) : (
+    <SpaceBetween
+      size="m"
+      alignOverride="items-center"
+      className="w-full max-w-md"
+    >
+      <TrackerSelect
+        trackers={trackers}
+        onSelect={val => setParentTracker(val ?? null)}
+      />
+      {parentTracker && (
+        <TrackerSelect
+          trackers={childTrackers}
+          onSelect={val => onTrackerChange(val?.id)}
+          label={parentTracker?.label}
+          placeholder={`Select a ${parentTracker?.label.toLowerCase()}`}
+        />
+      )}
+    </SpaceBetween>
+  );
+}
+
+function TrackerSelect({
+  trackers,
+  label,
+  placeholder,
+  onSelect,
+}: {
+  trackers: Maybe<TrackerDefinition[]>;
+  label?: Nullable<string>;
+  placeholder?: Nullable<string>;
+  onSelect: (item: Maybe<TrackerDefinition>) => void;
+}) {
+  return (
     <Select
       variant="bordered"
       className="shadow-none"
       items={trackers ?? []}
-      label="Tracker type"
-      placeholder="Select a tracker"
+      label={label ?? 'Tracker type'}
+      placeholder={placeholder ?? 'Select a tracker'}
+      onChange={({ target: { value } }) =>
+        onSelect?.(trackers?.find(tracker => tracker.id === Number(value)))
+      }
     >
       {tracker => (
-        <SelectItem key={tracker.id} textValue={tracker.label}>
+        <SelectItem
+          key={tracker.id}
+          textValue={tracker.label}
+          classNames={{
+            base: 'data-[hover=true]:bg-default-100 data-[selectable=true]:focus:bg-default-100',
+          }}
+        >
           <div className="flex gap-2 items-center">
             <FeatureIcon
               icon={tracker.icon}
@@ -44,7 +89,7 @@ export function CreateTrackerSelection({}: CreateTrackerSelectionProps) {
             />
             <div className="flex flex-col">
               <span className="text-small">{tracker.label}</span>
-              <span className="text-tiny text-default-400">
+              <span className="text-tiny text-default-500">
                 {tracker.description}
               </span>
             </div>

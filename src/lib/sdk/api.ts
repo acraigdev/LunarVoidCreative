@@ -18,11 +18,13 @@ export class APIResponse<T> {
 }
 
 export function processResponse<T>(res: APIResponse<T>) {
-  const data = new APIResponse(res);
-  if (data.success && data.data) return data.data;
+  const apiResponse = new APIResponse(res);
+  if (apiResponse.success && apiResponse.data) {
+    return apiResponse.data;
+  }
   throw new Error(
-    data.message
-      ? data.message
+    apiResponse.message
+      ? apiResponse.message
       : 'An unknown error occurred processing the request',
   );
 }

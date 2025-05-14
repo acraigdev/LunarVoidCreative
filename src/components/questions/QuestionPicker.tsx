@@ -23,11 +23,13 @@ export function QuestionPicker({ question, name }: QuestionPickerProps) {
   };
 
   const QuestionComponent = Questions[question.type] as React.ElementType;
+  console.log(question.data);
 
   if (QuestionComponent) {
     return (
       <QuestionComponent
         {...question}
+        {...question.data}
         variant="bordered"
         name={name}
         type="text"

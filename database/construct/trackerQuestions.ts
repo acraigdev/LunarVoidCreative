@@ -15,9 +15,11 @@ const db = new sqlite3.Database(
 
 // Serialize method ensures that database queries are executed sequentially
 db.serialize(() => {
+  // db.run(`DROP TABLE ${TRACKER_QUESTIONS}`);
   // Create the items table if it doesn't exist
   db.run(
     `CREATE TABLE IF NOT EXISTS ${TRACKER_QUESTIONS} (
+        id INTEGER PRIMARY KEY,
         trackerId INTEGER NOT NULL REFERENCES ${TRACKERS},
         questionId INTEGER NOT NULL REFERENCES ${QUESTIONS}
       )`,

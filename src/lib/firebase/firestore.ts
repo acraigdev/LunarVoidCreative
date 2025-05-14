@@ -12,7 +12,7 @@ import {
   setDoc,
 } from 'firebase/firestore';
 import invariant from 'ts-invariant';
-import type { Tracker } from '../utils/types/Tracker';
+import type { UserTracker } from '../utils/types/Tracker';
 
 export async function addUserToDb(userId: string) {
   const docRef = doc(db, 'users', userId);
@@ -39,17 +39,17 @@ export async function addUserToDb(userId: string) {
 //   await batch.commit();
 // }
 
-export async function upsertTracker(tracker: Tracker) {
+export async function upsertTracker(tracker: UserTracker) {
   const uid = auth.currentUser?.uid;
   invariant(uid, 'uid undefined');
   const usersRef = doc(db, 'users', uid, 'trackers', tracker.id).withConverter(
-    converter<Tracker>(),
+    converter<UserTracker>(),
   );
 
   return await setDoc(usersRef, tracker);
 }
 
-export async function getTrackers() {
+export async function getUserTrackers() {
   const uid = auth.currentUser?.uid;
   invariant(uid, 'uid undefined');
   const q = query(collection(db, 'users', uid, 'trackers'), limit(20));
@@ -58,7 +58,8 @@ export async function getTrackers() {
   // }
 
   const docs = await getDocs(q);
-  return docs.docs.map(doc => doc.data()) as Array<Tracker>;
+  console.log(docs.docs.map(doc => doc.data()));
+  return docs.docs.map(doc => doc.data()) as Array<UserTracker>;
 }
 
 const converter = <T>() => ({

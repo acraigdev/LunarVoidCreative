@@ -24,7 +24,11 @@ self.addEventListener('install', event => {
 self.addEventListener('fetch', event => {
   const { origin } = new URL(event.request.url);
   if (origin !== self.location.origin) return;
-  event.respondWith(fetchWithFirebaseHeaders(event.request));
+  try {
+    event.respondWith(fetchWithFirebaseHeaders(event.request));
+  } catch (err) {
+    console.log('withHeaders', err);
+  }
 });
 
 async function fetchWithFirebaseHeaders(request) {

@@ -1,7 +1,7 @@
 import type { ErrorInfo, ReactNode } from 'react';
 import React, { Component } from 'react';
 import { SpaceBetween } from '@/components/shared/SpaceBetween';
-import { Icon } from '@/components/shared/StyledIcon';
+import { Icon } from '@/components/shared/Icon';
 
 interface Props {
   children: ReactNode;

@@ -4,27 +4,24 @@ import React from 'react';
 import { QuestionPicker } from './QuestionPicker';
 import { SpaceBetween } from '../shared/SpaceBetween';
 import { upsertTracker } from '../../lib/firebase/firestore';
-import { QuestionType } from '@/lib/utils/types/Questions';
+import { Question, QuestionType } from '@/lib/utils/types/Questions';
 import { Timestamp } from 'firebase/firestore';
 import { v4 as uuidv4 } from 'uuid';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
-import type { Tracker } from '@/lib/utils/types/Tracker';
-import { getQuestionList } from '../../lib/sdk/databaseQueries';
-import type { Nullable } from '../../lib/utils/typeHelpers';
+import type { UserTracker } from '@/lib/utils/types/Tracker';
+import { getTrackerQuestions } from '../../lib/sdk/databaseQueries';
 
 interface CreateFormProps {
-  trackerId?: string;
-  tracker: string;
-  subtype?: Nullable<string>;
+  trackerId: number;
 }
 
-export function CreateForm({ tracker, subtype, trackerId }: CreateFormProps) {
+export function CreateForm({ trackerId }: CreateFormProps) {
   const queryClient = useQueryClient();
   const router = useRouter();
 
   const { data: questionList, isLoading } = useQuery({
-    ...getQuestionList({ tracker, subtype }),
+    ...getTrackerQuestions({ trackerId }),
   });
   const convertQuestionData = (data: Record<string, FormDataEntryValue>) => {
     return Object.keys(data).reduce(
@@ -50,7 +47,7 @@ export function CreateForm({ tracker, subtype, trackerId }: CreateFormProps) {
   };
 
   const { mutateAsync: upsertForm } = useMutation({
-    mutationFn: async (tracker: Tracker) => {
+    mutationFn: async (tracker: UserTracker) => {
       return await upsertTracker(tracker);
     },
     onSuccess: () => {
@@ -82,13 +79,16 @@ export function CreateForm({ tracker, subtype, trackerId }: CreateFormProps) {
   return (
     <Form className="w-full max-w-md" onSubmit={onSubmit}>
       <SpaceBetween size="m" alignOverride="items-center" className="w-full">
-        {Object.keys(questionList).map(question => (
-          <QuestionPicker
-            question={questionList[question]}
-            name={question}
-            key={question}
-          />
-        ))}
+        {Object.keys(questionList).map(
+          q =>
+            questionList[Number(q)] && (
+              <QuestionPicker
+                question={questionList[Number(q)] as Question}
+                name={q}
+                key={q}
+              />
+            ),
+        )}
         <Button color="primary" type="submit" size="lg">
           Create
         </Button>
