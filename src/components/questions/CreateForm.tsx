@@ -4,13 +4,12 @@ import React from 'react';
 import { QuestionPicker } from './QuestionPicker';
 import { SpaceBetween } from '../shared/SpaceBetween';
 import { upsertTracker } from '../../lib/firebase/firestore';
-import { Question, QuestionType } from '@/lib/utils/types/Questions';
-import { Timestamp } from 'firebase/firestore';
 import { v4 as uuidv4 } from 'uuid';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import type { UserTracker } from '@/lib/utils/types/Tracker';
 import { getTrackerQuestions } from '../../lib/sdk/databaseQueries';
+import { questionToFirestore } from '@/lib/utils/firebaseConverters';
 
 interface CreateFormProps {
   trackerId: number;
@@ -26,18 +25,13 @@ export function CreateForm({ trackerId }: CreateFormProps) {
   const convertQuestionData = (data: Record<string, FormDataEntryValue>) => {
     return Object.keys(data).reduce(
       (acc, q) => {
-        const question = questionList?.[q];
+        const question = questionList?.find(
+          question => question.id === Number(q),
+        );
         if (!data[q] || !question) return acc;
-        const type = question.type;
-
         return {
           ...acc,
-          [q]:
-            type === QuestionType.date
-              ? Timestamp.fromDate(new Date(data[q] as string))
-              : type === QuestionType.number || type === QuestionType.slider
-                ? Number(data[q])
-                : data[q],
+          [q]: questionToFirestore({ type: question.type, value: data[q] }),
         };
       },
       // TODO
@@ -62,16 +56,16 @@ export function CreateForm({ trackerId }: CreateFormProps) {
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    // TODO: validate data types, e.g. int !== float
     const data = Object.fromEntries(new FormData(e.currentTarget));
-    const { label, ...converted } = convertQuestionData(data);
+    const converted = convertQuestionData(data);
     await upsertForm({
-      id: trackerId ? trackerId : uuidv4(),
-      ...(!trackerId && { created: new Date() }),
+      id: uuidv4(),
+      // ...(!editId && { created: new Date() }),
+      created: new Date(),
       modified: new Date(),
-      tracker,
-      label: label,
+      trackerId,
       data: converted,
-      ...(subtype && { subtype }),
     });
   };
   if (isLoading) return <Spinner />;
@@ -79,16 +73,13 @@ export function CreateForm({ trackerId }: CreateFormProps) {
   return (
     <Form className="w-full max-w-md" onSubmit={onSubmit}>
       <SpaceBetween size="m" alignOverride="items-center" className="w-full">
-        {Object.keys(questionList).map(
-          q =>
-            questionList[Number(q)] && (
-              <QuestionPicker
-                question={questionList[Number(q)] as Question}
-                name={q}
-                key={q}
-              />
-            ),
-        )}
+        {Object.keys(questionList).map(q => (
+          <QuestionPicker
+            question={questionList[Number(q)]}
+            name={String(q)}
+            key={q}
+          />
+        ))}
         <Button color="primary" type="submit" size="lg">
           Create
         </Button>

@@ -6,7 +6,6 @@ import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
 import { APIResponse } from '../../../lib/sdk/api';
 import type { Question } from '../../../lib/utils/types/Questions';
-import { QUESTIONS, TRACKER_QUESTIONS } from '../../../../database/tables';
 
 interface DBQuestion extends Omit<Question, 'data'> {
   data: string;
@@ -17,9 +16,12 @@ export async function GET(req: NextRequest) {
   const trackerId = params.get('trackerId');
   let questions: Nullable<Question[]> = null;
   const db = new sqlite3.Database('collection.db', sqlite3.OPEN_READONLY);
-  const sql = `WITH tq AS (SELECT questionId FROM ${TRACKER_QUESTIONS} WHERE trackerId = ${trackerId})
-SELECT * FROM ${QUESTIONS} q
-WHERE q.id IN tq;`;
+
+  const sql = `WITH tq AS (SELECT rank, questionId FROM tracker_questions WHERE trackerId = ${trackerId})
+SELECT q.*, tq.rank FROM questions q
+inner join tq on q.id = tq.questionId
+WHERE q.id IN (SELECT questionId FROM tq)
+ORDER BY rank;`;
 
   try {
     const res: DBQuestion[] = await fetchAll(db, sql);
@@ -35,10 +37,13 @@ WHERE q.id IN tq;`;
 
   if (questions) {
     return NextResponse.json(
-      new APIResponse<Question[]>({ success: true, data: questions }),
+      new APIResponse<Question[]>({
+        success: true,
+        data: questions,
+      }),
     );
   }
 
   // TODO: error processor for error, empty, etc
-  return NextResponse.json(new APIResponse<Question[]>({ success: false }));
+  return NextResponse.json(new APIResponse({ success: false }));
 }

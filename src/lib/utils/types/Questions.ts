@@ -42,6 +42,7 @@ export type Question = (
   id: number;
   label: string;
   preview?: boolean;
+  header?: boolean;
 };
 
 export const QuestionType = {

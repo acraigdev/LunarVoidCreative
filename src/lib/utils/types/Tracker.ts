@@ -5,7 +5,6 @@ export type UserTracker = {
   created?: Date;
   modified: Date;
   trackerId: number;
-  label: string;
   data: Record<string, unknown>;
 };
 

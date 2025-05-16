@@ -15,12 +15,14 @@ const db = new sqlite3.Database(
 
 // Serialize method ensures that database queries are executed sequentially
 db.serialize(() => {
+  // db.run(`DROP TABLE questions`);
   // Create the items table if it doesn't exist
   db.run(
     `CREATE TABLE IF NOT EXISTS ${QUESTIONS} (
         id INTEGER PRIMARY KEY,
         label TEXT NOT NULL,
         type TEXT NOT NULL,
+        header BOOLEAN NOT NULL CHECK (header IN (0, 1)),
         preview BOOLEAN NOT NULL CHECK (preview IN (0, 1)),
         data TEXT
       )`,
@@ -37,16 +39,16 @@ db.serialize(() => {
         }
         console.log(`All rows deleted from ${QUESTIONS}`);
 
-        const insertSql = `INSERT INTO ${QUESTIONS}(label, type, preview, data) VALUES 
-        ('Title', 'input', false, null),
-        ('Start date', 'date', true, null),
-        ('End date', 'date', true, null),
-        ('Notes', 'textarea', false, null),
-        ('Pattern', 'input', false, null),
-        ('Current row', 'number', true, null),
-        ('Hook size', 'slider', true, '{"defaultValue":4,"minValue":0.25,"maxValue":10,"step":0.25,"allowManual":true}'),
-        ('Yarn details', 'input', false, null),
-        ('Medication name', 'input', true, null)`;
+        const insertSql = `INSERT INTO ${QUESTIONS}(label, type, preview, header, data) VALUES 
+        ('Title', 'input', false, true, null),
+        ('Start date', 'date', true, false, null),
+        ('End date', 'date', true, false, null),
+        ('Notes', 'textarea', false, false, null),
+        ('Pattern', 'input', false, false, null),
+        ('Current row', 'number', true, false, null),
+        ('Hook size', 'slider', true, false, '{"defaultValue":4,"minValue":0.25,"maxValue":10,"step":0.25,"allowManual":true}'),
+        ('Yarn details', 'input', false, false, null),
+        ('Medication name', 'input', true, true, null)`;
 
         db.run(insertSql, function (err) {
           if (err) {
