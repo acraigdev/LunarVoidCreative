@@ -1,23 +1,17 @@
 import type { Nullable } from '../typeHelpers';
-import type { Project, ProjectType } from './Projects';
 
-export const TrackerType = {
-  project: 'project',
-  medication: 'medication',
-} as const;
-
-export type TrackerType = (typeof TrackerType)[keyof typeof TrackerType];
-
-export type TrackerData = Project;
-
-export type TrackerSubtype = ProjectType;
-
-export type Tracker = {
+export type UserTracker = {
   id: string;
   created?: Date;
   modified: Date;
-  tracker: TrackerType;
+  trackerId: number;
+  data: Record<string, unknown>;
+};
+
+export type TrackerDefinition = {
+  id: number;
   label: string;
-  data: TrackerData;
-  subtype?: Nullable<TrackerSubtype>;
+  description?: Nullable<string>;
+  icon?: Nullable<string>;
+  parentId?: Nullable<number>;
 };

@@ -1,5 +1,5 @@
 'use client';
-import { getTrackers } from '@/lib/firebase/firestore';
+import { getUserTrackers } from '@/lib/firebase/firestore';
 import { Spinner } from '@heroui/react';
 import { useQuery } from '@tanstack/react-query';
 import { TrackerCard } from './components/TrackerCard';
@@ -8,7 +8,7 @@ import { SpaceBetween } from '@/components/shared/SpaceBetween';
 export default function Home() {
   const { data: trackers, isLoading } = useQuery({
     queryKey: ['getTrackers'],
-    queryFn: () => getTrackers(),
+    queryFn: () => getUserTrackers(),
   });
 
   return (

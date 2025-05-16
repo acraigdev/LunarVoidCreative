@@ -29,6 +29,11 @@ To learn more about Next.js, take a look at the following resources:
 
 You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
+## Debugging `This side can't be reached` on localhost
+
+- Check logs in devtools - more often than not, it's the service worker
+- Delete `.next` folder
+
 ## Husky makes git take forever
 
 - GCP env variables

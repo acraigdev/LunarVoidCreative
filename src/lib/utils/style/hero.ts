@@ -13,6 +13,7 @@ export default heroui({
         // content2,
         // content3,
         // content4
+        // default
         primary: {
           50: '#fcf7ff',
           100: '#F4E1F7',

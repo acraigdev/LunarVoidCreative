@@ -4,58 +4,44 @@ import React from 'react';
 import { QuestionPicker } from './QuestionPicker';
 import { SpaceBetween } from '../shared/SpaceBetween';
 import { upsertTracker } from '../../lib/firebase/firestore';
-import { QuestionType } from '@/lib/utils/types/Questions';
-import { Timestamp } from 'firebase/firestore';
 import { v4 as uuidv4 } from 'uuid';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
-import type {
-  Tracker,
-  TrackerSubtype,
-  TrackerType,
-} from '@/lib/utils/types/Tracker';
-import type { AvailableQuestions } from '@/lib/utils/questionList';
-import { getQuestionList } from '../../lib/api/firebaseQueries';
-import type { Nullable } from '../../lib/utils/typeHelpers';
+import type { UserTracker } from '@/lib/utils/types/Tracker';
+import { getTrackerQuestions } from '../../lib/sdk/databaseQueries';
+import { questionToFirestore } from '@/lib/utils/firebaseConverters';
 
 interface CreateFormProps {
-  trackerId?: string;
-  tracker: TrackerType;
-  subtype?: Nullable<TrackerSubtype>;
+  trackerId: number;
 }
 
-export function CreateForm({ tracker, subtype, trackerId }: CreateFormProps) {
+export function CreateForm({ trackerId }: CreateFormProps) {
   const queryClient = useQueryClient();
   const router = useRouter();
 
   const { data: questionList, isLoading } = useQuery({
-    ...getQuestionList({ tracker, subtype }),
+    ...getTrackerQuestions({ trackerId }),
   });
   const convertQuestionData = (data: Record<string, FormDataEntryValue>) => {
-    return (Object.keys(data) as AvailableQuestions[]).reduce(
+    return Object.keys(data).reduce(
       (acc, q) => {
-        const question = questionList?.[q];
+        const question = questionList?.find(
+          question => question.id === Number(q),
+        );
         if (!data[q] || !question) return acc;
-        const type = question.type;
-
         return {
           ...acc,
-          [q]:
-            type === QuestionType.date
-              ? Timestamp.fromDate(new Date(data[q] as string))
-              : type === QuestionType.number || type === QuestionType.slider
-                ? Number(data[q])
-                : data[q],
+          [q]: questionToFirestore({ type: question.type, value: data[q] }),
         };
       },
       // TODO
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      {} as Record<AvailableQuestions, any>,
+      {} as Record<string, any>,
     );
   };
 
   const { mutateAsync: upsertForm } = useMutation({
-    mutationFn: async (tracker: Tracker) => {
+    mutationFn: async (tracker: UserTracker) => {
       return await upsertTracker(tracker);
     },
     onSuccess: () => {
@@ -70,16 +56,16 @@ export function CreateForm({ tracker, subtype, trackerId }: CreateFormProps) {
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    // TODO: validate data types, e.g. int !== float
     const data = Object.fromEntries(new FormData(e.currentTarget));
-    const { label, ...converted } = convertQuestionData(data);
+    const converted = convertQuestionData(data);
     await upsertForm({
-      id: trackerId ? trackerId : uuidv4(),
-      ...(!trackerId && { created: new Date() }),
+      id: uuidv4(),
+      // ...(!editId && { created: new Date() }),
+      created: new Date(),
       modified: new Date(),
-      tracker,
-      label: label,
+      trackerId,
       data: converted,
-      ...(subtype && { subtype }),
     });
   };
   if (isLoading) return <Spinner />;
@@ -87,11 +73,11 @@ export function CreateForm({ tracker, subtype, trackerId }: CreateFormProps) {
   return (
     <Form className="w-full max-w-md" onSubmit={onSubmit}>
       <SpaceBetween size="m" alignOverride="items-center" className="w-full">
-        {(Object.keys(questionList) as AvailableQuestions[]).map(question => (
+        {Object.keys(questionList).map(q => (
           <QuestionPicker
-            question={questionList[question]}
-            name={question}
-            key={question}
+            question={questionList[Number(q)]}
+            name={String(q)}
+            key={q}
           />
         ))}
         <Button color="primary" type="submit" size="lg">

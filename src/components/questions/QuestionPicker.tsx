@@ -7,21 +7,23 @@ import {
   Slider,
   Textarea,
 } from '@heroui/react';
-import type { AvailableQuestions } from '@/lib/utils/questionList';
+import { Nullable } from '@/lib/utils/typeHelpers';
+
+const Questions = {
+  input: Input,
+  slider: Slider, // TODO: renderValue input for custom value/manual entry, unknown option?
+  textarea: Textarea,
+  number: NumberInput,
+  date: DatePicker,
+};
 
 export type QuestionPickerProps = {
-  question: Question;
-  name: AvailableQuestions;
+  question?: Nullable<Question>;
+  name: string;
 };
 
 export function QuestionPicker({ question, name }: QuestionPickerProps) {
-  const Questions = {
-    input: Input,
-    slider: Slider, // TODO: renderValue input for custom value/manual entry, unknown option?
-    textarea: Textarea,
-    number: NumberInput,
-    date: DatePicker,
-  };
+  if (!question) return <></>;
 
   const QuestionComponent = Questions[question.type] as React.ElementType;
 
@@ -29,6 +31,7 @@ export function QuestionPicker({ question, name }: QuestionPickerProps) {
     return (
       <QuestionComponent
         {...question}
+        {...question.data}
         variant="bordered"
         name={name}
         type="text"

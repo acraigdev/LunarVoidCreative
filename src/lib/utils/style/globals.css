@@ -58,7 +58,7 @@ span {
 */
 .trackerCard {
   --r: 14px; /* the radius */
-  --t: 30px; /* top padding */
+  --t: 45px; /* top padding */
   border-radius: var(--r);
   padding-top: var(--t);
   mask-image:

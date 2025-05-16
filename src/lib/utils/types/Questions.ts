@@ -7,24 +7,29 @@ import type {
 } from '@heroui/react';
 import type { Nullable } from '../typeHelpers';
 
-export interface InputQuestion extends InputProps {
+export interface InputQuestion {
   type: 'input';
+  data?: Nullable<InputProps>;
 }
-export interface SliderQuestion extends SliderProps {
+export interface SliderQuestion {
   type: 'slider';
   allowManual?: boolean;
+  data?: Nullable<SliderProps>;
 }
 
-export interface TextAreaQuestion extends TextAreaProps {
+export interface TextAreaQuestion {
   type: 'textarea';
+  data?: Nullable<TextAreaProps>;
 }
 
-export interface DateQuestion extends DatePickerProps {
+export interface DateQuestion {
   type: 'date';
+  data?: Nullable<DatePickerProps>;
 }
 
-export interface NumberQuestion extends NumberInputProps {
+export interface NumberQuestion {
   type: 'number';
+  data?: Nullable<NumberInputProps>;
 }
 
 export type Question = (
@@ -34,8 +39,10 @@ export type Question = (
   | DateQuestion
   | NumberQuestion
 ) & {
+  id: number;
   label: string;
   preview?: boolean;
+  header?: boolean;
 };
 
 export const QuestionType = {
