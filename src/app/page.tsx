@@ -1,5 +1,5 @@
 'use client';
-import { getUserTrackers } from '@/lib/firebase/firestore';
+import { listUserTrackers } from '@/lib/firebase/firestore';
 import { Spinner } from '@heroui/react';
 import { useQuery } from '@tanstack/react-query';
 import { TrackerCard } from './components/TrackerCard';
@@ -10,8 +10,8 @@ export default function Home() {
   const { getItems } = useMasonry();
 
   const { data: trackers, isLoading } = useQuery({
-    queryKey: ['getTrackers'],
-    queryFn: () => getUserTrackers(),
+    queryKey: ['listUserTrackers'],
+    queryFn: () => listUserTrackers(),
   });
 
   const trackerColumns = getItems(trackers);

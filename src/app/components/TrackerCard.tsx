@@ -11,8 +11,10 @@ import { FeatureIcon } from '../../components/shared/FeatureIcon';
 import invariant from 'ts-invariant';
 import type { Nullable } from '@/lib/utils/typeHelpers';
 import { firestoreToQuestion } from '@/lib/utils/firebaseConverters';
+import { useRouter } from 'next/navigation';
 
-export function TrackerCard({ trackerId, data }: UserTracker) {
+export function TrackerCard({ trackerId, data, id }: UserTracker) {
+  const router = useRouter();
   const { data: trackerDef, isLoading: isTrackerDefLoading } = useQuery({
     ...getTrackerDefinition({ id: trackerId }),
   });
@@ -65,7 +67,7 @@ export function TrackerCard({ trackerId, data }: UserTracker) {
       >
         <Card
           isPressable
-          onPress={() => console.log('pressed')}
+          onPress={() => router.push(`/details/${id}`)}
           className="trackerCard w-full relative"
         >
           <CardHeader>

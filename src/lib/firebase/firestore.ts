@@ -6,6 +6,7 @@ import type {
 import {
   collection,
   doc,
+  getDoc,
   getDocs,
   limit,
   query,
@@ -29,7 +30,18 @@ export async function upsertTracker(tracker: UserTracker) {
   return await setDoc(usersRef, tracker);
 }
 
-export async function getUserTrackers() {
+export async function getUserTracker({ id }: { id: string }) {
+  const uid = auth.currentUser?.uid;
+  invariant(uid, 'uid undefined');
+  const usersRef = doc(db, 'users', uid, 'trackers', id).withConverter(
+    converter<UserTracker>(),
+  );
+
+  const docSnap = await getDoc(usersRef);
+  return docSnap.data();
+}
+
+export async function listUserTrackers() {
   const uid = auth.currentUser?.uid;
   invariant(uid, 'uid undefined');
   const q = query(
