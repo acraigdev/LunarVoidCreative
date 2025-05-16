@@ -7,7 +7,7 @@ import {
   Slider,
   Textarea,
 } from '@heroui/react';
-import { Nullable } from '@/lib/utils/typeHelpers';
+import type { Nullable } from '@/lib/utils/typeHelpers';
 
 const Questions = {
   input: Input,

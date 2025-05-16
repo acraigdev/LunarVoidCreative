@@ -1,45 +1,39 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# LunarVoidCreative
+
+A Next.js app built to help keep track of various aspects of life including craft projects, medications, book collections and more.
 
 ## Getting Started
 
 First, run the development server:
 
 ```bash
+# Create service worker if needed
+npm run build-service-worker
+# then
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Technology Used
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- next.js
+- react + react-query
+- firebase app hosting
+- firestore
+- sqlite
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Debugging
 
-## Learn More
+### `This site can't be reached` on localhost
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Debugging `This side can't be reached` on localhost
-
-- Check logs in devtools - more often than not, it's the service worker
+- Check logs in devtools - more often than not, it's the service worker that needs to be regenerated
 - Delete `.next` folder
 
-## Husky makes git take forever
+### Commits take forever
 
-- GCP env variables
-- generate service worker
+Husky runs a precommit hook to ensure type and lint safety
 
-#### TODO
+## Tech debt TODO
 
-- constraints - limit label length etc
-- next lint has more than inline VSC and need to figure that out because its annoying
+- constraint in create - limit label length etc
+- next lint has more than inline VSC and need to figure that out
+- look into GCP env variables

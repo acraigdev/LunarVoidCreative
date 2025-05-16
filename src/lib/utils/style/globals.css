@@ -6,6 +6,9 @@
 @theme inline {
   --font-header: var(--font-montserrat-sans);
   --font-body: var(--font-quick-sans);
+  --breakpoint-sm: 40rem;
+  --breakpoint-md: 48rem;
+  --breakpoint-lg: 64rem;
 }
 
 :focus-visible {

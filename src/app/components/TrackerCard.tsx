@@ -1,7 +1,7 @@
 'use client';
 
 import type { UserTracker } from '@/lib/utils/types/Tracker';
-import { Card, CardBody, CardHeader } from '@heroui/react';
+import { Card, CardBody, CardHeader, Skeleton } from '@heroui/react';
 import { useQuery } from '@tanstack/react-query';
 import {
   getTrackerDefinition,
@@ -9,15 +9,15 @@ import {
 } from '../../lib/sdk/databaseQueries';
 import { FeatureIcon } from '../../components/shared/FeatureIcon';
 import invariant from 'ts-invariant';
-import { Nullable } from '@/lib/utils/typeHelpers';
+import type { Nullable } from '@/lib/utils/typeHelpers';
 import { firestoreToQuestion } from '@/lib/utils/firebaseConverters';
 
 export function TrackerCard({ trackerId, data }: UserTracker) {
-  const { data: trackerDef } = useQuery({
+  const { data: trackerDef, isLoading: isTrackerDefLoading } = useQuery({
     ...getTrackerDefinition({ id: trackerId }),
   });
 
-  const { data: formattedData } = useQuery({
+  const { data: formattedData, isLoading: isFormattedDataLoading } = useQuery({
     ...getTrackerQuestions({ trackerId }),
     select: questionList => {
       invariant(questionList, 'questionList for details is undefined');
@@ -56,31 +56,35 @@ export function TrackerCard({ trackerId, data }: UserTracker) {
       );
     },
   });
-  console.log(formattedData);
 
   return (
-    <div className="trackerShadow mb-4">
-      <Card
-        isPressable
-        onPress={() => console.log('pressed')}
-        className="trackerCard w-full relative"
+    <div className="trackerShadow">
+      <Skeleton
+        className="trackerCard !pt-0"
+        isLoaded={!isTrackerDefLoading && !isFormattedDataLoading}
       >
-        <CardHeader>
-          <FeatureIcon
-            icon={trackerDef?.icon}
-            classes="size-10 text-primary-700 absolute left-1/2 -translate-x-1/2 top-1"
-          />
-          <h4 className="font-bold text-left">{formattedData?.header}</h4>
-        </CardHeader>
-        <CardBody className="pt-0">
-          {formattedData?.display?.map(data => (
-            <div key={data.id}>
-              <span className="font-semibold">{data.label}:</span>{' '}
-              {String(data.value)}
-            </div>
-          ))}
-        </CardBody>
-      </Card>
+        <Card
+          isPressable
+          onPress={() => console.log('pressed')}
+          className="trackerCard w-full relative"
+        >
+          <CardHeader>
+            <FeatureIcon
+              icon={trackerDef?.icon}
+              classes="size-10 text-primary-700 absolute left-1/2 -translate-x-1/2 top-1"
+            />
+            <h4 className="font-bold text-left">{formattedData?.header}</h4>
+          </CardHeader>
+          <CardBody className="pt-0 w-full">
+            {formattedData?.display?.map(data => (
+              <div key={data.id}>
+                <span className="font-semibold">{data.label}:</span>{' '}
+                {String(data.value)}
+              </div>
+            ))}
+          </CardBody>
+        </Card>
+      </Skeleton>
     </div>
   );
 }
