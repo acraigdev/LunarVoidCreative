@@ -46,7 +46,7 @@ db.serialize(() => {
         ('Notes', 'textarea', false, false, null),
         ('Pattern', 'input', false, false, null),
         ('Current row', 'number', true, false, null),
-        ('Hook size', 'slider', true, false, '{"defaultValue":4,"minValue":0.25,"maxValue":10,"step":0.25,"allowManual":true}'),
+        ('Hook size', 'slider', true, false, '{"minValue":0.25,"maxValue":10,"step":0.25,"allowManual":true}'),
         ('Yarn details', 'input', false, false, null),
         ('Medication name', 'input', true, true, null)`;
 

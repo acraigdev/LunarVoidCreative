@@ -11,6 +11,7 @@ import {
   getDoc,
   getDocs,
   limit,
+  orderBy,
   query,
   setDoc,
 } from 'firebase/firestore';
@@ -23,9 +24,16 @@ export async function addUserToDb(userId: string) {
   return await setDoc(docRef, { userId });
 }
 
-export async function upsertTracker(tracker: UserTracker) {
-  const uid = auth.currentUser?.uid;
-  invariant(uid, 'uid undefined');
+export async function upsertTracker({
+  tracker,
+  db,
+  uid,
+}: {
+  tracker: UserTracker;
+  db: Firestore;
+  uid?: Maybe<string>;
+}) {
+  if (!uid) return;
   const usersRef = doc(db, 'users', uid, 'trackers', tracker.id).withConverter(
     converter<UserTracker>(),
   );
@@ -56,6 +64,7 @@ export async function listUserTrackers({
     collection(db, 'users', uid, 'trackers').withConverter(
       converter<UserTracker>(),
     ),
+    orderBy('modified', 'desc'),
     limit(20),
   );
   // if (lastDoc) {
