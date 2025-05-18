@@ -1,5 +1,7 @@
+'use server';
 import { db, auth } from '@/lib/firebase/clientApp';
 import type {
+  Firestore,
   QueryDocumentSnapshot,
   SnapshotOptions,
 } from 'firebase/firestore';
@@ -14,6 +16,7 @@ import {
 } from 'firebase/firestore';
 import invariant from 'ts-invariant';
 import type { UserTracker } from '../utils/types/Tracker';
+import type { Maybe } from '../utils/typeHelpers';
 
 export async function addUserToDb(userId: string) {
   const docRef = doc(db, 'users', userId);
@@ -41,9 +44,14 @@ export async function getUserTracker({ id }: { id: string }) {
   return docSnap.data();
 }
 
-export async function listUserTrackers() {
-  const uid = auth.currentUser?.uid;
-  invariant(uid, 'uid undefined');
+export async function listUserTrackers({
+  db,
+  uid,
+}: {
+  db: Firestore;
+  uid?: Maybe<string>;
+}) {
+  if (!uid) return;
   const q = query(
     collection(db, 'users', uid, 'trackers').withConverter(
       converter<UserTracker>(),
@@ -55,20 +63,11 @@ export async function listUserTrackers() {
   // }
 
   const docs = await getDocs(q);
-  console.log(docs.docs.map(doc => doc.data()));
-  return docs.docs.map(doc => doc.data()) as Array<UserTracker>;
+  return docs.docs.map(doc => doc.data());
 }
 
 const converter = <T>() => ({
   toFirestore: (data: T) => data ?? {},
-  fromFirestore: (
-    snap: QueryDocumentSnapshot<T>,
-    options?: SnapshotOptions,
-  ) => {
-    const data = snap.data(options);
-    return {
-      ...data,
-      id: snap.id,
-    };
-  },
+  fromFirestore: (snap: QueryDocumentSnapshot, options?: SnapshotOptions) =>
+    snap.data(options) as T,
 });

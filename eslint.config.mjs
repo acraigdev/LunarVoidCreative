@@ -32,21 +32,23 @@ const eslintConfig = [
       'comma-spacing': 'error',
       'eol-last': 'error',
       'import/no-absolute-path': 'error',
-      'import/no-extraneous-dependencies': [
-        'error',
-        {
-          devDependencies: [
-            '**/*.test.ts',
-            '**/*.spec.ts',
-            '**/*.test.tsx',
-            '**/*.spec.tsx',
-            '**/*.style.ts',
-            './configuration/**/*',
-            './scripts/**/*',
-            '*eslint*',
-          ],
-        },
-      ],
+      'import/no-extraneous-dependencies': 'off',
+      // Disable until I decide how to handle this for heroui
+      // [
+      //   'warn',
+      //   {
+      //     devDependencies: [
+      //       '**/*.test.ts',
+      //       '**/*.spec.ts',
+      //       '**/*.test.tsx',
+      //       '**/*.spec.tsx',
+      //       '**/*.style.ts',
+      //       './configuration/**/*',
+      //       './scripts/**/*',
+      //       '*eslint*',
+      //     ],
+      //   },
+      // ],
       'init-declarations': ['error', 'always'],
       'jsx-quotes': 'error',
       'no-multiple-empty-lines': [

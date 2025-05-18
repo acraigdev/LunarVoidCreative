@@ -9,8 +9,11 @@ import { firebaseConfig } from './config';
 import { getAuth } from 'firebase/auth';
 
 export async function getAuthenticatedAppForUser() {
-  const header = await headers();
-  const idToken = header.get('Authorization')?.split('Bearer ')[1];
+  const headerList = await headers();
+  // for (const [key, value] of headerList.entries()) {
+  //   console.log(`${key}: ${value}`);
+  // }
+  const idToken = headerList.get('Authorization')?.split('Bearer ')[1];
   const firebaseServerApp = initializeServerApp(
     firebaseConfig,
     idToken

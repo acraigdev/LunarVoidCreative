@@ -2,13 +2,13 @@
 import { Button, Form, Spinner } from '@heroui/react';
 import React from 'react';
 import { QuestionPicker } from './QuestionPicker';
-import { SpaceBetween } from '../shared/SpaceBetween';
-import { upsertTracker } from '../../lib/firebase/firestore';
+import { SpaceBetween } from '../../../components/shared/SpaceBetween';
+import { upsertTracker } from '../../../lib/firebase/firestore';
 import { v4 as uuidv4 } from 'uuid';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import type { UserTracker } from '@/lib/utils/types/Tracker';
-import { getTrackerQuestions } from '../../lib/sdk/databaseQueries';
+import { getTrackerQuestions } from '../../../lib/sdk/databaseQueries';
 import { questionToFirestore } from '@/lib/utils/firebaseConverters';
 
 interface CreateFormProps {
@@ -62,8 +62,8 @@ export function CreateForm({ trackerId }: CreateFormProps) {
     await upsertForm({
       id: uuidv4(),
       // ...(!editId && { created: new Date() }),
-      created: new Date(),
-      modified: new Date(),
+      created: Date.now(),
+      modified: Date.now(),
       trackerId,
       data: converted,
     });

@@ -1,37 +1,23 @@
-'use client';
-import { listUserTrackers } from '@/lib/firebase/firestore';
-import { Spinner } from '@heroui/react';
-import { useQuery } from '@tanstack/react-query';
-import { TrackerCard } from './components/TrackerCard';
+import { Spinner } from '@heroui/spinner';
 import { SpaceBetween } from '@/components/shared/SpaceBetween';
-import { useMasonry } from '../lib/utils/hooks/useMasonry';
+import { Suspense } from 'react';
+import { Trackers } from './(home)/Trackers';
+import { getFirestore } from 'firebase/firestore';
+import { getAuthenticatedAppForUser } from '@/lib/firebase/serverApp';
+import { listUserTrackers } from '@/lib/firebase/firestore';
 
-export default function Home() {
-  const { getItems } = useMasonry();
-
-  const { data: trackers, isLoading } = useQuery({
-    queryKey: ['listUserTrackers'],
-    queryFn: () => listUserTrackers(),
-  });
-
-  const trackerColumns = getItems(trackers);
+export default async function Home() {
+  const { firebaseServerApp, currentUser } = await getAuthenticatedAppForUser();
+  const db = getFirestore(firebaseServerApp);
+  const uid = currentUser?.uid;
+  const trackers = await listUserTrackers({ db, uid });
 
   return (
     <SpaceBetween size="m" alignOverride="items-center">
       <h1>Trackers</h1>
-      {isLoading ? (
-        <Spinner />
-      ) : (
-        <div className="grid grid-cols-1 lg:grid-cols-3 sm:grid-cols-2 gap-4 w-full">
-          {trackerColumns?.map((column, i) => (
-            <div className="flex flex-col gap-6 w-full" key={i}>
-              {column.map(tracker => (
-                <TrackerCard key={tracker.id} {...tracker} />
-              ))}
-            </div>
-          ))}
-        </div>
-      )}
+      <Suspense fallback={<Spinner />}>
+        <Trackers trackers={trackers} />
+      </Suspense>
     </SpaceBetween>
   );
 }

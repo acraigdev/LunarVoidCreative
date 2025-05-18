@@ -1,4 +1,3 @@
-'use client';
 import { useMemo } from 'react';
 import { useWindowWidth } from '@react-hook/window-size';
 import type { Nullable } from '../typeHelpers';
@@ -28,8 +27,8 @@ export const useMasonry = () => {
           ? 2
           : 1;
 
-    const getItems = <T>(items: Nullable<Array<T>>) => {
-      if (!items) return;
+    const getMasonryColumns = <T>(items: Nullable<Array<T>>) => {
+      if (!items || typeof document === 'undefined') return;
       return items.reduce(
         (acc, item, i) => {
           const index = i % columns;
@@ -43,7 +42,7 @@ export const useMasonry = () => {
     };
 
     return {
-      getItems,
+      getMasonryColumns,
       columns,
     };
   }, [widthToBreakpoint]);

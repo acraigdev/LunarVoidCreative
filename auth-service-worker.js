@@ -5,7 +5,7 @@ import { getInstallations, getToken } from 'firebase/installations';
 // this is set during install
 let firebaseConfig = null;
 
-self.addEventListener('install', event => {
+self.addEventListener('install', () => {
   // extract firebase config from query string
   const serializedFirebaseConfig = new URL(location).searchParams.get(
     'firebaseConfig',
@@ -24,13 +24,7 @@ self.addEventListener('install', event => {
 self.addEventListener('fetch', event => {
   const { origin } = new URL(event.request.url);
   if (origin !== self.location.origin) return;
-  try {
-    fetchWithFirebaseHeaders(event.request).then(res => {
-      if (res) event.respondWith(res);
-    });
-  } catch (err) {
-    console.log('withHeaders', err);
-  }
+  event.respondWith((async () => fetchWithFirebaseHeaders(event.request))());
 });
 
 async function fetchWithFirebaseHeaders(request) {

@@ -1,8 +1,8 @@
 'use client';
 import React, { useState } from 'react';
-import { CreateForm } from '../../components/questions/CreateForm';
+import { CreateForm } from './components/CreateForm';
 import type { Nullable } from '../../lib/utils/typeHelpers';
-import { CreateTrackerSelection } from '../../components/questions/CreateTrackerSelection';
+import { CreateTrackerSelection } from './components/CreateTrackerSelection';
 import { SpaceBetween } from '../../components/shared/SpaceBetween';
 
 export default function Create() {

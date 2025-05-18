@@ -1,10 +1,4 @@
-import { Timestamp } from 'firebase/firestore';
 import { QuestionType } from './types/Questions';
-
-export const dateToTimestamp = (date: string) =>
-  Timestamp.fromDate(new Date(date));
-export const timestampToDate = (date: Timestamp) =>
-  date.toDate().toLocaleDateString('en-US');
 
 export const questionToFirestore = ({
   type,
@@ -13,11 +7,11 @@ export const questionToFirestore = ({
   type: string;
   value: unknown;
 }) => {
-  return type === QuestionType.date
-    ? dateToTimestamp(value as string)
-    : type === QuestionType.number || type === QuestionType.slider
-      ? Number(value)
-      : String(value);
+  return type === QuestionType.number ||
+    type === QuestionType.slider ||
+    type === QuestionType.date
+    ? Number(value)
+    : String(value);
 };
 
 export const firestoreToQuestion = ({
@@ -27,9 +21,9 @@ export const firestoreToQuestion = ({
   type: string;
   value: unknown;
 }) => {
-  return type === QuestionType.date
-    ? timestampToDate(value as Timestamp)
-    : type === QuestionType.number || type === QuestionType.slider
-      ? Number(value)
-      : String(value);
+  return type === QuestionType.number ||
+    type === QuestionType.slider ||
+    type === QuestionType.date
+    ? Number(value)
+    : String(value);
 };

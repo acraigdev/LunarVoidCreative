@@ -2,8 +2,8 @@ import type { Nullable } from '../typeHelpers';
 
 export type UserTracker = {
   id: string;
-  created?: Date;
-  modified: Date;
+  created?: number;
+  modified: number;
   trackerId: number;
   data: Record<string, unknown>;
 };

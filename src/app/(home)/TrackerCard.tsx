@@ -1,5 +1,4 @@
 'use client';
-
 import type { UserTracker } from '@/lib/utils/types/Tracker';
 import { Card, CardBody, CardHeader, Skeleton } from '@heroui/react';
 import { useQuery } from '@tanstack/react-query';
