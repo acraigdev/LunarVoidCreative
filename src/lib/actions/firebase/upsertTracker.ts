@@ -3,6 +3,7 @@
 import * as firestore from '@/lib/firebase/firestore';
 import { getAuthenticatedAppForUser } from '@/lib/firebase/serverApp';
 import { questionToFirestore } from '@/lib/utils/firebaseConverters';
+import type { Nullable } from '@/lib/utils/typeHelpers';
 import type { Question } from '@/lib/utils/types/Questions';
 import { getFirestore } from 'firebase/firestore';
 import { redirect } from 'next/navigation';
@@ -30,22 +31,25 @@ const convertQuestionData = (
 };
 
 export const upsertTracker = async (
-  e: FormData,
   questionList: Question[],
   trackerId: number,
+  userTrackerId: Nullable<string>,
+  e: FormData,
 ) => {
   const { firebaseServerApp, currentUser } = await getAuthenticatedAppForUser();
   const db = getFirestore(firebaseServerApp);
   const uid = currentUser?.uid;
+  const userTracker = userTrackerId
+    ? await firestore.getUserTracker({ db, uid, userTracker: userTrackerId })
+    : null;
   // TODO: validate data types, e.g. int !== float
   const data = Object.fromEntries(e);
   const converted = convertQuestionData(data, questionList);
   await firestore
     .upsertTracker({
       tracker: {
-        id: uuidv4(),
-        // ...(!editId && { created: new Date() }),
-        created: Date.now(),
+        id: userTracker ? userTracker.id : uuidv4(),
+        created: userTracker ? userTracker.created : Date.now(),
         modified: Date.now(),
         trackerId,
         data: converted,
@@ -54,6 +58,7 @@ export const upsertTracker = async (
       uid,
     })
     .then(() => {
+      // TODO: toast
       // queryClient.invalidateQueries({ queryKey: ['getProjects'] });
       redirect('/');
     });

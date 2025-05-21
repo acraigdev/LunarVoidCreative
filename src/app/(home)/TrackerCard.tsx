@@ -66,7 +66,7 @@ export function TrackerCard({ trackerId, data, id }: UserTracker) {
       >
         <Card
           isPressable
-          onPress={() => router.push(`/details/${id}`)}
+          onPress={() => router.push(`/edit/${id}`)}
           className="trackerCard w-full relative"
         >
           <CardHeader>

@@ -43,6 +43,7 @@ export type Question = (
   label: string;
   preview?: boolean;
   header?: boolean;
+  defaultValue?: unknown;
 };
 
 export const QuestionType = {

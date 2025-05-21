@@ -41,10 +41,17 @@ export async function upsertTracker({
   return await setDoc(usersRef, tracker);
 }
 
-export async function getUserTracker({ id }: { id: string }) {
-  const uid = auth.currentUser?.uid;
+export async function getUserTracker({
+  db,
+  uid,
+  userTracker,
+}: {
+  db: Firestore;
+  uid?: Maybe<string>;
+  userTracker: string;
+}) {
   invariant(uid, 'uid undefined');
-  const usersRef = doc(db, 'users', uid, 'trackers', id).withConverter(
+  const usersRef = doc(db, 'users', uid, 'trackers', userTracker).withConverter(
     converter<UserTracker>(),
   );
 

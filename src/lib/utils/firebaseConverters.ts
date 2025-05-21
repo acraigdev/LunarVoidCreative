@@ -1,4 +1,5 @@
 import { QuestionType } from './types/Questions';
+import { CalendarDate } from 'calendar-date';
 
 export const questionToFirestore = ({
   type,
@@ -7,11 +8,11 @@ export const questionToFirestore = ({
   type: string;
   value: unknown;
 }) => {
-  return type === QuestionType.number ||
-    type === QuestionType.slider ||
-    type === QuestionType.date
+  return type === QuestionType.number || type === QuestionType.slider
     ? Number(value)
-    : String(value);
+    : type === QuestionType.date
+      ? +new Date(String(value))
+      : String(value);
 };
 
 export const firestoreToQuestion = ({
@@ -21,9 +22,9 @@ export const firestoreToQuestion = ({
   type: string;
   value: unknown;
 }) => {
-  return type === QuestionType.number ||
-    type === QuestionType.slider ||
-    type === QuestionType.date
+  return type === QuestionType.number || type === QuestionType.slider
     ? Number(value)
-    : String(value);
+    : type === QuestionType.date
+      ? new Date(Number(value)).toISOString().split('T')[0]
+      : String(value);
 };
