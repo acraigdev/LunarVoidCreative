@@ -1,24 +1,22 @@
 'use client';
 import React, { useState } from 'react';
-import type { Maybe, Nullable } from '../../../lib/utils/typeHelpers';
+import type { Maybe, Nullable } from '../../../../lib/utils/typeHelpers';
 import { Select, SelectItem, Spinner } from '@heroui/react';
 import { useQuery } from '@tanstack/react-query';
 import { listTrackerDefinitions } from '@/lib/sdk/databaseQueries';
-import { FeatureIcon } from '../../../components/shared/FeatureIcon';
-import type { TrackerDefinition } from '../../../lib/utils/types/Tracker';
-import { SpaceBetween } from '../../../components/shared/SpaceBetween';
+import { FeatureIcon } from '../../../../components/shared/FeatureIcon';
+import type { TrackerDefinition } from '../../../../lib/utils/types/Tracker';
+import { SpaceBetween } from '../../../../components/shared/SpaceBetween';
+import { useRouter } from 'next/navigation';
+import { Route } from '../../../../lib/utils/routes';
 
-interface CreateTrackerSelectionProps {
-  tracker: Nullable<number>;
-  onTrackerChange: (tracker: Nullable<number>) => void;
-}
-
-export function CreateTrackerSelection({
-  onTrackerChange,
-}: CreateTrackerSelectionProps) {
-  // TODO: edit
+export function CreateTrackerSelection() {
+  // TODO: handle prepop on refresh
+  // Fix loading
+  const router = useRouter();
   const [parentTracker, setParentTracker] =
     useState<Nullable<TrackerDefinition>>(null);
+
   const { data: trackers, isLoading } = useQuery({
     ...listTrackerDefinitions({ parentId: null }),
   });
@@ -38,12 +36,17 @@ export function CreateTrackerSelection({
     >
       <TrackerSelect
         trackers={trackers}
-        onSelect={val => setParentTracker(val ?? null)}
+        onSelect={val => {
+          router.push(`${Route.Create.path}?trackerId=${val?.id ?? ''}`);
+          setParentTracker(val ?? null);
+        }}
       />
-      {parentTracker && (
+      {childTrackers && (
         <TrackerSelect
           trackers={childTrackers}
-          onSelect={val => onTrackerChange(val?.id)}
+          onSelect={val =>
+            router.push(`${Route.Create.path}?trackerId=${val?.id ?? ''}`)
+          }
           label={parentTracker?.label}
           placeholder={`Select a ${parentTracker?.label.toLowerCase()}`}
         />

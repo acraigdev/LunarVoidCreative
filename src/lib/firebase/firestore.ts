@@ -1,5 +1,6 @@
 'use server';
-import { db, auth } from '@/lib/firebase/clientApp';
+import 'server-only';
+import { db } from '@/lib/firebase/clientApp';
 import type {
   Firestore,
   QueryDocumentSnapshot,
@@ -7,6 +8,7 @@ import type {
 } from 'firebase/firestore';
 import {
   collection,
+  deleteDoc,
   doc,
   getDoc,
   getDocs,
@@ -17,7 +19,7 @@ import {
 } from 'firebase/firestore';
 import invariant from 'ts-invariant';
 import type { UserTracker } from '../utils/types/Tracker';
-import type { Maybe } from '../utils/typeHelpers';
+import type { Maybe, Nullable } from '../utils/typeHelpers';
 
 export async function addUserToDb(userId: string) {
   const docRef = doc(db, 'users', userId);
@@ -57,6 +59,20 @@ export async function getUserTracker({
 
   const docSnap = await getDoc(usersRef);
   return docSnap.data();
+}
+
+export async function deleteUserTracker({
+  db,
+  uid,
+  userTrackerId,
+}: {
+  db: Firestore;
+  uid?: Maybe<string>;
+  userTrackerId: Nullable<string>;
+}) {
+  if (!userTrackerId) return;
+  invariant(uid, 'uid undefined');
+  await deleteDoc(doc(db, 'users', uid, 'trackers', userTrackerId));
 }
 
 export async function listUserTrackers({

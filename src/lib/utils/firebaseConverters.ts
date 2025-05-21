@@ -1,5 +1,4 @@
 import { QuestionType } from './types/Questions';
-import { CalendarDate } from 'calendar-date';
 
 export const questionToFirestore = ({
   type,

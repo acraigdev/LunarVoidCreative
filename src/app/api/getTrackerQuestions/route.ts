@@ -9,7 +9,9 @@ import { getTrackerQuestions } from '@/lib/actions/database/getTrackerQuestions'
 export async function GET(req: NextRequest) {
   const params = req.nextUrl.searchParams;
   const trackerId = params.get('trackerId');
-  const questions = await getTrackerQuestions({ trackerId });
+  const questions = await getTrackerQuestions({
+    trackerId: trackerId ? Number(trackerId) : null,
+  });
 
   if (questions) {
     return NextResponse.json(

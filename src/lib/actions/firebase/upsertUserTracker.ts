@@ -30,7 +30,7 @@ const convertQuestionData = (
   );
 };
 
-export const upsertTracker = async (
+export const upsertUserTracker = async (
   questionList: Question[],
   trackerId: number,
   userTrackerId: Nullable<string>,
