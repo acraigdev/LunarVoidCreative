@@ -2,7 +2,7 @@
 import { Button } from '@heroui/button';
 import { Form } from '@heroui/form';
 import React from 'react';
-import { QuestionPicker } from './QuestionPicker';
+import { QuestionPicker } from '../trackers/QuestionPicker';
 import { SpaceBetween } from './SpaceBetween';
 import { upsertUserTracker } from '@/lib/actions/firebase/upsertUserTracker';
 import type { Question } from '@/lib/utils/types/Questions';

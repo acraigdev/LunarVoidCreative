@@ -7,6 +7,7 @@ import { Slider } from '@heroui/slider';
 import { NumberInput } from '@heroui/number-input';
 import { DatePicker } from '@heroui/date-picker';
 import { parseDate } from '@internationalized/date';
+import { Toggle } from './Toggle';
 
 const Questions = {
   input: Input,
@@ -14,6 +15,7 @@ const Questions = {
   textarea: Textarea,
   number: NumberInput,
   date: DatePicker,
+  toggle: Toggle,
 };
 
 export type QuestionPickerProps = {
@@ -44,5 +46,5 @@ export function QuestionPicker({ question, name }: QuestionPickerProps) {
       />
     );
   }
-  return <div>Unknown question type</div>;
+  return <div>Unknown question type {question.type}</div>;
 }

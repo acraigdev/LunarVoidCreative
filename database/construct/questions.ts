@@ -48,7 +48,10 @@ db.serialize(() => {
         ('Current row', 'number', true, false, null),
         ('Hook size', 'slider', true, false, '{"minValue":0.25,"maxValue":10,"step":0.25,"allowManual":true}'),
         ('Yarn details', 'input', false, false, null),
-        ('Medication name', 'input', true, true, null)`;
+        ('Medication name', 'input', true, true, null),
+        ('Logs', 'logs', false, false, null),
+        ('Negative reaction', 'toggle', true, false, '{"color": "danger"}'),
+        ('Symptoms', 'list', false, false, null)`;
 
         db.run(insertSql, function (err) {
           if (err) {

@@ -13,8 +13,6 @@ export default async function Create({
   const questionList = await getTrackerQuestions({
     trackerId: Number(trackerId),
   });
-  // console.log(questionList);
-  // console.log(tracker);
 
   return (
     <div className="m-auto rounded-lg shadow-sm p-4 md:p-15 bg-white">

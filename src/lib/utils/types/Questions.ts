@@ -3,6 +3,7 @@ import type {
   InputProps,
   NumberInputProps,
   SliderProps,
+  SwitchProps,
   TextAreaProps,
 } from '@heroui/react';
 import type { Nullable } from '../typeHelpers';
@@ -32,12 +33,18 @@ export interface NumberQuestion {
   data?: Nullable<NumberInputProps>;
 }
 
+export interface ToggleQuestion {
+  type: 'toggle';
+  data?: Nullable<SwitchProps>;
+}
+
 export type Question = (
   | InputQuestion
   | SliderQuestion
   | TextAreaQuestion
   | DateQuestion
   | NumberQuestion
+  | ToggleQuestion
 ) & {
   id: number;
   label: string;

@@ -12,7 +12,7 @@ const compat = new FlatCompat({
 const eslintConfig = [
   ...compat.config({
     extends: ['next', 'next/core-web-vitals', 'next/typescript', 'prettier'],
-    plugins: ['prettier'],
+    plugins: ['jsx-a11y', 'prettier'],
     rules: {
       '@typescript-eslint/consistent-type-imports': [
         'error',
