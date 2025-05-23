@@ -47,7 +47,11 @@ export function getTrackerDefinition({ id }: { id: number }) {
   };
 }
 
-export function getTrackerQuestions({ trackerId }: { trackerId: number }) {
+export function getTrackerQuestions({
+  trackerId,
+}: {
+  trackerId?: Nullable<number>;
+}) {
   const queryKey = [
     {
       api: 'getTrackerQuestions',

@@ -11,6 +11,7 @@ import invariant from 'ts-invariant';
 import type { Nullable } from '@/lib/utils/typeHelpers';
 import { firestoreToQuestion } from '@/lib/utils/firebaseConverters';
 import { useRouter } from 'next/navigation';
+import { Route } from '../../lib/utils/routes';
 
 export function TrackerCard({ trackerId, data, id }: UserTracker) {
   const router = useRouter();
@@ -61,12 +62,12 @@ export function TrackerCard({ trackerId, data, id }: UserTracker) {
   return (
     <div className="trackerShadow">
       <Skeleton
-        className="trackerCard !pt-0"
+        className={`trackerCard !pt-0 ${isTrackerDefLoading || isFormattedDataLoading ? 'min-h-56' : ''}`}
         isLoaded={!isTrackerDefLoading && !isFormattedDataLoading}
       >
         <Card
           isPressable
-          onPress={() => router.push(`/details/${id}`)}
+          onPress={() => router.push(`${Route.Edit.path}/${id}`)}
           className="trackerCard w-full relative"
         >
           <CardHeader>

@@ -4,6 +4,8 @@ import '@/lib/utils/style/globals.css';
 import Header from '../components/layout/Header';
 import { getAuthenticatedAppForUser } from '../lib/firebase/serverApp';
 import { Providers } from '../components/layout/Providers';
+import { Suspense } from 'react';
+import { Spinner } from '@heroui/spinner';
 
 const quicksandSans = Quicksand({
   variable: '--font-quick-sans',
@@ -39,7 +41,9 @@ export default async function RootLayout({
       >
         <Providers>
           <Header initialUser={JSON.stringify(currentUser)} />
-          <main className="w-full max-w-[1024px] m-auto py-8">{children}</main>
+          <main className="w-full max-w-[1024px] m-auto px-8">
+            <Suspense fallback={<Spinner />}>{children}</Suspense>
+          </main>
         </Providers>
       </body>
     </html>

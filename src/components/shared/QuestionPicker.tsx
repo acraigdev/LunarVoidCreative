@@ -1,13 +1,12 @@
+'use client';
 import React from 'react';
 import type { Question } from '@/lib/utils/types/Questions';
-import {
-  DatePicker,
-  Input,
-  NumberInput,
-  Slider,
-  Textarea,
-} from '@heroui/react';
 import type { Nullable } from '@/lib/utils/typeHelpers';
+import { Input, Textarea } from '@heroui/input';
+import { Slider } from '@heroui/slider';
+import { NumberInput } from '@heroui/number-input';
+import { DatePicker } from '@heroui/date-picker';
+import { parseDate } from '@internationalized/date';
 
 const Questions = {
   input: Input,
@@ -32,6 +31,12 @@ export function QuestionPicker({ question, name }: QuestionPickerProps) {
       <QuestionComponent
         {...question}
         {...question.data}
+        {...(Boolean(question.defaultValue) && {
+          defaultValue:
+            question.defaultValue && question.type === 'date'
+              ? parseDate(String(question.defaultValue))
+              : question.defaultValue,
+        })}
         variant="bordered"
         name={name}
         type="text"
