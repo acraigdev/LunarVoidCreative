@@ -20,6 +20,7 @@ import {
 import invariant from 'ts-invariant';
 import type { UserTracker } from '../utils/types/Tracker';
 import type { Maybe, Nullable } from '../utils/typeHelpers';
+import { cache } from '../utils/cache';
 
 export async function addUserToDb(userId: string) {
   const docRef = doc(db, 'users', userId);
@@ -75,28 +76,24 @@ export async function deleteUserTracker({
   await deleteDoc(doc(db, 'users', uid, 'trackers', userTrackerId));
 }
 
-export async function listUserTrackers({
-  db,
-  uid,
-}: {
-  db: Firestore;
-  uid?: Maybe<string>;
-}) {
-  if (!uid) return;
-  const q = query(
-    collection(db, 'users', uid, 'trackers').withConverter(
-      converter<UserTracker>(),
-    ),
-    orderBy('modified', 'desc'),
-    limit(20),
-  );
-  // if (lastDoc) {
-  //   q = query(q, startAfter(lastDoc));
-  // }
+export const listUserTrackers = cache(
+  async ({ db, uid }: { db: Firestore; uid?: Maybe<string> }) => {
+    if (!uid) return;
+    const q = query(
+      collection(db, 'users', uid, 'trackers').withConverter(
+        converter<UserTracker>(),
+      ),
+      orderBy('modified', 'desc'),
+      limit(20),
+    );
+    // if (lastDoc) {
+    //   q = query(q, startAfter(lastDoc));
+    // }
 
-  const docs = await getDocs(q);
-  return docs.docs.map(doc => doc.data());
-}
+    const docs = await getDocs(q);
+    return docs.docs.map(doc => doc.data());
+  },
+);
 
 const converter = <T>() => ({
   toFirestore: (data: T) => data ?? {},

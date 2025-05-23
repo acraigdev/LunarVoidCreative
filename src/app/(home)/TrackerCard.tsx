@@ -62,7 +62,7 @@ export function TrackerCard({ trackerId, data, id }: UserTracker) {
   return (
     <div className="trackerShadow">
       <Skeleton
-        className="trackerCard !pt-0"
+        className={`trackerCard !pt-0 ${isTrackerDefLoading || isFormattedDataLoading ? 'min-h-56' : ''}`}
         isLoaded={!isTrackerDefLoading && !isFormattedDataLoading}
       >
         <Card

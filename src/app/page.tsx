@@ -1,16 +1,16 @@
-import { Spinner } from '@heroui/spinner';
 import { SpaceBetween } from '@/components/shared/SpaceBetween';
-import { Suspense } from 'react';
-import { Trackers } from './(home)/Trackers';
 import { getFirestore } from 'firebase/firestore';
 import { getAuthenticatedAppForUser } from '@/lib/firebase/serverApp';
 import { listUserTrackers } from '@/lib/firebase/firestore';
+import Trackers from './(home)/Trackers';
+import { Suspense } from 'react';
+import { Spinner } from '@heroui/spinner';
 
 export default async function Home() {
   const { firebaseServerApp, currentUser } = await getAuthenticatedAppForUser();
   const db = getFirestore(firebaseServerApp);
   const uid = currentUser?.uid;
-  const trackers = await listUserTrackers({ db, uid });
+  const trackers = listUserTrackers({ db, uid });
 
   return (
     <SpaceBetween size="m" alignOverride="items-center">

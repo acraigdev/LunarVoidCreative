@@ -41,7 +41,7 @@ export function CreateTrackerSelection() {
           setParentTracker(val ?? null);
         }}
       />
-      {childTrackers && (
+      {childTrackers?.length && (
         <TrackerSelect
           trackers={childTrackers}
           onSelect={val =>

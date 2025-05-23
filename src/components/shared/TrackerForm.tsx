@@ -22,7 +22,6 @@ export async function TrackerForm({
   trackerId,
   userTrackerId,
 }: TrackerFormProps) {
-  console.log(questionList);
   if (!questionList || !trackerId) return <>TODO Error</>;
   const upsert = upsertUserTracker.bind(
     null,

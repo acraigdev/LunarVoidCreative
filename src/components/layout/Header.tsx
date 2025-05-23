@@ -3,7 +3,6 @@ import type { Key } from 'react';
 import React, { useEffect, useState } from 'react';
 import { onAuthStateChanged, signOut } from '@/lib/firebase/auth';
 import {
-  Link,
   Navbar,
   NavbarContent,
   NavbarItem,
@@ -19,6 +18,7 @@ import { LoginScreen } from './LoginScreen';
 import type { Nullable } from '@/lib/utils/typeHelpers';
 import type { User } from 'firebase/auth';
 import { firebaseConfig } from '@/lib/firebase/config';
+import Link from 'next/link';
 
 function useUserSession(initialUser: Nullable<User>) {
   // The initialUser comes from the server via a server component
